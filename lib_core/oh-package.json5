@@ -1,0 +1,11 @@
+{
+  "name": "@ohpg/fin-core",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "peerless2012",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohpg/jellyfin": "file:../../FinSdk/jellyfin"
+  }
+}
