@@ -1,6 +1,6 @@
 import { window } from "@kit.ArkUI";
 import { Constants } from "../cons/Constants";
-import { BusinessError } from "@kit.BasicServicesKit";
+import { BusinessError, settings } from "@kit.BasicServicesKit";
 import hilog from "@ohos.hilog";
 import { audio } from "@kit.AudioKit";
 const TAG = 'DeviceUtil';
@@ -20,9 +20,11 @@ export class DeviceUtil {
 
   private static windowClass: window.Window | undefined = undefined;
 
-  public static MAX_VOLUME = 15
+  private static userBrightness?: number
 
-  public static BRIGHTNESS = -1
+  private static defaultBrightness?: number
+
+  public static MAX_VOLUME = 15
 
   /**
    * init windowClass
@@ -34,37 +36,75 @@ export class DeviceUtil {
     DeviceUtil.MAX_VOLUME = DeviceUtil.getMaxVolume()
   }
 
-  public static getBrightness(): number {
+  /**
+   * Get current brightness
+   * @param context
+   * @returns
+   */
+  public static getBrightness(context: Context): number {
     let brightness = DeviceUtil.windowClass?.getWindowProperties().brightness
     if (brightness === undefined) {
       brightness = 0
+    } else if (brightness < 0) {
+      let value = settings.getValueSync(context
+        , settings.display.SCREEN_BRIGHTNESS_STATUS
+        , "25"
+        , settings.domainName.DEVICE_SHARED)
+      try {
+        brightness = Number.parseInt(value) / 255
+      } catch (error) {
+      }
     }
     return brightness
   }
 
   /**
    * Set brightness
-   *
-   * @param brightness Page key cached in brightness map | brightness
-   * @param setMode There are two modes for setting brightness based on business differentiation.
-   * 0: Enter the page or return to the homepage to set the brightness once, and read the page brightness from the map;
-   * 1: Continuous sliding adjustment of brightness on video page
    */
-  public static setBrightness(brightness: number): void {
+  public static setBrightness(context: Context, brightness: number): void {
     try {
-      DeviceUtil.windowClass?.setWindowBrightness(brightness as number);
+      // Save default brightness before change it
+      if (DeviceUtil.defaultBrightness === undefined) {
+        DeviceUtil.defaultBrightness = DeviceUtil.windowClass?.getWindowProperties().brightness
+      }
+      DeviceUtil.windowClass?.setWindowBrightness(brightness);
+      DeviceUtil.userBrightness = brightness
+    } catch (err) {
+      DeviceUtil.defaultBrightness = undefined
+      hilog.error(0x0000, TAG, `Failed Set brightness, errorCode: ${err.code}`);
+    }
+  }
+
+  /**
+   * Restore default brightness
+   * @param context
+   */
+  public static restoreDefaultBrightness(context: Context): void {
+    // not set before
+    if (DeviceUtil.defaultBrightness === undefined) {
+      return
+    }
+    try {
+      DeviceUtil.windowClass?.setWindowBrightness(DeviceUtil.defaultBrightness);
     } catch (err) {
       hilog.error(0x0000, TAG, `Failed Set brightness, errorCode: ${err.code}`);
     }
   }
 
-  public static saveBrightness(): void {
-    DeviceUtil.BRIGHTNESS = DeviceUtil.getBrightness()
-    DeviceUtil.setBrightness(-1)
-  }
-
-  public static restoreBrightness(): void {
-    DeviceUtil.setBrightness(DeviceUtil.BRIGHTNESS)
+  /**
+   * Restore user brightness
+   * @param context
+   */
+  public static restoreUserBrightness(): void {
+    // not set before
+    if (DeviceUtil.userBrightness === undefined) {
+      return
+    }
+    try {
+      DeviceUtil.windowClass?.setWindowBrightness(DeviceUtil.userBrightness);
+    } catch (err) {
+      hilog.error(0x0000, TAG, `Failed Set brightness, errorCode: ${err.code}`);
+    }
   }
 
   /**
