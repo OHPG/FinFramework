@@ -1,4 +1,4 @@
-import { CoreRepository } from '@ohpg/fin-core'
+import { CoreRepository, StringTool } from '@ohpg/fin-core'
 import { promptAction, router } from '@kit.ArkUI'
 import { FinPages } from '../FinPages'
 import { ProgressDialog } from '../../dialog/ProgressDialog'
@@ -144,12 +144,20 @@ struct AuthPage {
   }
 
   private onAuth() {
-    if (this.url == undefined) {
+    if (!this.url || this.url.length <= 0) {
+      promptAction.showToast({message: $r('app.string.error_url_empty')})
+      return
+    }
+    if (!this.url.startsWith('http')) {
+      promptAction.showToast({message: $r('app.string.error_url_not_start_with_http')})
+      return
+    }
+    if (!StringTool.isUrlValid(this.url)) {
       promptAction.showToast({message: $r('app.string.error_url_not_validate')})
       return
     }
-    if (this.userName == undefined || this.userName.length <= 0) {
-      promptAction.showToast({message: $r('app.string.error_user_name_not_validate')})
+    if (!this.userName || this.userName.length <= 0) {
+      promptAction.showToast({message: $r('app.string.error_user_name_empty')})
       return
     }
     this.progressDialog?.show()

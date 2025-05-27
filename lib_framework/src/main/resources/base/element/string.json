@@ -25,11 +25,19 @@
       "value": "*仅支持Jellyfin协议*"
     },
     {
-      "name": "error_url_not_validate",
+      "name": "error_url_empty",
       "value": "服务器地址不能为空"
     },
     {
-      "name": "error_user_name_not_validate",
+      "name": "error_url_not_start_with_http",
+      "value": "服务器地址必须以http或https开头"
+    },
+    {
+      "name": "error_url_not_validate",
+      "value": "服务器地址格式错误"
+    },
+    {
+      "name": "error_user_name_empty",
       "value": "用户名不能为空"
     },
     {

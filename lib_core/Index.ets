@@ -21,6 +21,7 @@ export { AppEvents } from './src/main/ets/event/AppEvents'
 // tool
 export { TimeTool } from './src/main/ets/tool/TimeTool'
 export { WebTool } from './src/main/ets/tool/WebTool'
+export { StringTool } from './src/main/ets/tool/StringTool'
 
 // system
 export { AvoidAreaSystem } from './src/main/ets/system/AvoidAreaSystem'

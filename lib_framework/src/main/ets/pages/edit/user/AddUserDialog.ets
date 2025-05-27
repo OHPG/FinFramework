@@ -106,7 +106,7 @@ struct addUserComponent {
 
   private verifyAddress() {
     if (!this.name) {
-      promptAction.showToast({message: $r('app.string.error_user_name_not_validate')})
+      promptAction.showToast({message: $r('app.string.error_user_name_empty')})
       return
     }
     this.verifying = true
