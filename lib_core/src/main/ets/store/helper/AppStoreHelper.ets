@@ -3,8 +3,8 @@ import { relationalStore } from "@kit.ArkData";
 import { ServerInfoTable } from "../table/ServerInfoTable";
 import { AddressInfoTable } from "../table/AddressInfoTable";
 import { UserInfoTable } from "../table/UserInfoTable";
-import BuildProfile from "../../../../../BuildProfile";
 import { ActiveInfoTable } from "../table/ActiveInfoTable";
+import BuildProfile from "../../../../../BuildProfile";
 
 /**
  * @Author peerless2012
@@ -31,7 +31,7 @@ export class AppStoreHelper extends StoreHelper{
       await store.executeSql(UserInfoTable.CREATE_SQL)
       await store.executeSql(ActiveInfoTable.CREATE_SQL)
     } catch (e) {
-      console.error("xxx " + JSON.stringify(e))
+      console.error("AppStoreHelper " + JSON.stringify(e))
     }
   }
 
