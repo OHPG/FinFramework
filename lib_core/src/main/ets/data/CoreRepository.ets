@@ -157,6 +157,10 @@ export abstract class CoreRepository {
    * @returns
    */
   public async addAddressByUrl(url: string): Promise<void> {
+    let preAddress = await this.dataStore.queryAddress(this.activeInfo!.serverInfo.serverId, MD5.digestSync(url))
+    if (preAddress) {
+      throw new Error("Url already exists.")
+    }
     this.jellyfinTmp.apiClient.updateServerInfo({address: url})
     let systemInfo = await this.jellyfinTmp.getSystemApi().getPublicSystemInfo()
     if (systemInfo.Id === this.activeInfo!.serverInfo.serverId) {

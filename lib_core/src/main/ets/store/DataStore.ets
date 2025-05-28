@@ -49,11 +49,11 @@ export class DataStore {
     if (serverInfo == undefined) {
       return undefined
     }
-    let addressInfo = await this.queryAddress(addressId)
+    let addressInfo = await this.queryAddress(serverId, addressId)
     if (addressInfo == undefined) {
       return undefined
     }
-    let userInfo = await this.queryUser(userId)
+    let userInfo = await this.queryUser(serverId, userId)
     if (userInfo == undefined) {
       return undefined
     }
@@ -235,9 +235,10 @@ export class DataStore {
    * @param addressId
    * @returns
    */
-  public async queryAddress(addressId: string): Promise<AddressInfo | undefined> {
+  public async queryAddress(serverId: string, addressId: string): Promise<AddressInfo | undefined> {
     let store = await this.storeHelper.getWritableStore()
     let rdbPredicates: relationalStore.RdbPredicates = new relationalStore.RdbPredicates(AddressInfoTable.TABLE_NAME)
+    rdbPredicates.equalTo(AddressInfoTable.SERVER_ID, serverId)
     rdbPredicates.equalTo(AddressInfoTable.ADDRESS_ID, addressId)
     let resultSet = await store.query(rdbPredicates)
     if (resultSet.rowCount <= 0 || !resultSet.goToFirstRow()) {
@@ -258,7 +259,7 @@ export class DataStore {
    * @returns
    */
   public async insertAddress(addressInfo: AddressInfo): Promise<void> {
-    let preServerInfo = await this.queryAddress(addressInfo.addressId)
+    let preServerInfo = await this.queryAddress(addressInfo.serverId, addressInfo.addressId)
     if (preServerInfo) {
       return this.updateAddress(addressInfo)
     }
@@ -344,9 +345,10 @@ export class DataStore {
    * @param userId
    * @returns
    */
-  public async queryUser(userId: string): Promise<UserInfo | undefined> {
+  public async queryUser(serverId: string, userId: string): Promise<UserInfo | undefined> {
     let store = await this.storeHelper.getWritableStore()
     let rdbPredicates: relationalStore.RdbPredicates = new relationalStore.RdbPredicates(UserInfoTable.TABLE_NAME)
+    rdbPredicates.equalTo(UserInfoTable.SERVER_ID, serverId)
     rdbPredicates.equalTo(UserInfoTable.USER_ID, userId)
     let resultSet = await store.query(rdbPredicates)
     if (resultSet.rowCount <= 0 || !resultSet.goToFirstRow()) {
@@ -370,7 +372,7 @@ export class DataStore {
    * @returns
    */
   public async insertUser(userInfo: UserInfo): Promise<void> {
-    let preUserInfo = await this.queryUser(userInfo.userId)
+    let preUserInfo = await this.queryUser(userInfo.serverId, userInfo.userId)
     if (preUserInfo) {
       return this.updateUser(userInfo)
     }
