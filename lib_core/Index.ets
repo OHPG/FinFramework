@@ -8,6 +8,9 @@ export { UserInfo } from './src/main/ets/entity/UserInfo'
 export { AppModel } from './src/main/ets/model/AppModel'
 export { LoadState, LoadType } from './src/main/ets/model/LoadState'
 
+// cons
+export { AppStorageKeys } from './src/main/ets/cons/AppStorageKeys'
+
 // data
 export { CoreRepository } from './src/main/ets/data/CoreRepository'
 

@@ -13,6 +13,7 @@ import { UserInfo } from "../entity/UserInfo"
 import { AppEventHub } from "../event/EventHub"
 import { MD5 } from "../crypto/MD5"
 import { AppEvents } from "../event/AppEvents"
+import { AppStorageKeys } from "../cons/AppStorageKeys"
 
 /**
  * Fin core repository
@@ -92,6 +93,7 @@ export abstract class CoreRepository {
     this.jellyfin.apiClient.updateServerInfo({address: activeInfo.addressInfo.address})
     this.jellyfin.apiClient.updateUserInfo({id: activeInfo.userInfo.userId, token: activeInfo.userInfo.accessToken})
     this.activeInfo = activeInfo
+    AppStorage.setOrCreate(AppStorageKeys.KEY_ACTIVE_INFO, activeInfo)
     AppEventHub.emit(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
   }
 
