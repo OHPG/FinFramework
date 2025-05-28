@@ -233,6 +233,12 @@ export abstract class CoreRepository {
 
     // query server info
     let systemInfo = await this.jellyfinTmp.getSystemApi().getPublicSystemInfo()
+
+    let preServer = await this.dataStore.queryServer(systemInfo.Id!)
+    if (preServer) {
+      throw new Error("Server already exists.")
+    }
+
     let serverInfo: ServerInfo = {
       serverId: systemInfo.Id!,
       serverName: systemInfo.ServerName!,
