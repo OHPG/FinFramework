@@ -1,7 +1,7 @@
 import { mediaquery, window } from '@kit.ArkUI';
 import { WindowUtil } from './WindowUtil';
 
-export enum BreakpointTypeEnum {
+enum BreakpointTypeEnum {
   SM = 'sm',
   MD = 'md',
   LG = 'lg',

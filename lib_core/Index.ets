@@ -28,4 +28,4 @@ export { StringTool } from './src/main/ets/tool/StringTool'
 
 // system
 export { AvoidAreaSystem } from './src/main/ets/system/AvoidAreaSystem'
-export { BreakpointSystem, BreakpointType, BreakpointTypeEnum, BreakpointTypes } from './src/main/ets/system/BreakpointSystem'
+export { BreakpointSystem, BreakpointType, BreakpointTypes } from './src/main/ets/system/BreakpointSystem'

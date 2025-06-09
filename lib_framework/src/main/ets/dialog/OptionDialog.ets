@@ -58,40 +58,37 @@ export interface Option {
 @Builder
 function OptionDialogBuilder(option: Options) {
   Stack() {
-
     Column({space: CommonConstants.SPACE_8}) {
-      if (option.title) {
-        Text(option.title)
-          .fontSize(18)
-          .width('100%')
-
-        List({space: CommonConstants.SPACE_8}) {
-          ForEach(option.options, (item: Option, index) => {
-            ListItem() {
-              Row({space: 6}) {
-                Text(item.title)
-                  .textOverflow({overflow: TextOverflow.Ellipsis})
-                  .ellipsisMode(EllipsisMode.END)
-                  .layoutWeight(1)
-                  .maxLines(1)
-                Checkbox()
-                  .select(item.checked)
-                  .hitTestBehavior(HitTestMode.None)
-              }
-              .width('100%')
-              .onClick(() => {
-                option.callback?.(index)
-                option.dialog?.dismiss(true)
-              })
-            }
-          })
-        }
-        .height('auto')
+      Text(option.title)
+        .fontSize(18)
         .width('100%')
-        .constraintSize({
-          maxHeight: '75%'
+
+      List({space: CommonConstants.SPACE_8}) {
+        ForEach(option.options, (item: Option, index) => {
+          ListItem() {
+            Row({space: 6}) {
+              Text(item.title)
+                .textOverflow({overflow: TextOverflow.Ellipsis})
+                .ellipsisMode(EllipsisMode.END)
+                .layoutWeight(1)
+                .maxLines(1)
+              Checkbox()
+                .select(item.checked)
+                .hitTestBehavior(HitTestMode.None)
+            }
+            .width('100%')
+            .onClick(() => {
+              option.callback?.(index)
+              option.dialog?.dismiss(true)
+            })
+          }
         })
       }
+      .height('auto')
+      .width('100%')
+      .constraintSize({
+        maxHeight: '75%'
+      })
     }
     .backgroundColor($r('sys.color.ohos_id_color_dialog_bg'))
     .border({

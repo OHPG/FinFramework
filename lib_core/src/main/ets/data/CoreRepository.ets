@@ -93,8 +93,13 @@ export abstract class CoreRepository {
     this.jellyfin.apiClient.updateServerInfo({address: activeInfo.addressInfo.address})
     this.jellyfin.apiClient.updateUserInfo({id: activeInfo.userInfo.userId, token: activeInfo.userInfo.accessToken})
     this.activeInfo = activeInfo
+    this.onActiveInfoChanged()
     AppStorage.setOrCreate(AppStorageKeys.KEY_ACTIVE_INFO, activeInfo)
     AppEventHub.emit(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
+  }
+
+  protected onActiveInfoChanged() {
+
   }
 
   public getActiveInfo(): ActiveInfo | undefined {

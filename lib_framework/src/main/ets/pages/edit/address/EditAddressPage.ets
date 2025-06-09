@@ -106,8 +106,10 @@ struct AddressItem {
         .fontColor([$r('sys.color.ohos_id_color_text_primary')])
       Text(this.item?.address)
         .fontSize(18)
+        .ellipsisMode(EllipsisMode.END)
+        .textOverflow({overflow: TextOverflow.MARQUEE})
         .fontColor($r('sys.color.ohos_id_color_text_primary'))
-      Blank()
+        .layoutWeight(1)
       Toggle({type: ToggleType.Checkbox, isOn: this.activeAddressId === this.item?.addressId})
         .hitTestBehavior(HitTestMode.None)
     }
