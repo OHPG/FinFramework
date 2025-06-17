@@ -14,6 +14,7 @@ import { AppEventHub } from "../event/EventHub"
 import { MD5 } from "../crypto/MD5"
 import { AppEvents } from "../event/AppEvents"
 import { AppStorageKeys } from "../cons/AppStorageKeys"
+import { VersionTool } from "../tool/VersionTool"
 
 /**
  * Fin core repository
@@ -242,6 +243,12 @@ export abstract class CoreRepository {
 
     // query server info
     let systemInfo = await this.jellyfinTmp.getSystemApi().getPublicSystemInfo()
+    if (!systemInfo.StartupWizardCompleted) {
+      throw new Error("Server startup wizard not complete.")
+    }
+    if (!systemInfo.Version || !VersionTool.isVersionAtLeast(systemInfo.Version, 10, 10)) {
+      throw new Error("Server version must be 10.10.x or above.")
+    }
 
     let preServer = await this.dataStore.queryServer(systemInfo.Id!)
     if (preServer) {
