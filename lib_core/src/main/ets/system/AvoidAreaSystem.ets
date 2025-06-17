@@ -34,8 +34,12 @@ export class AvoidAreaSystem {
   private avoidAreaMap = new Map<window.AvoidAreaType, window.AvoidArea>()
 
   private avoidAreaChangeCallback: Callback<window.AvoidAreaOptions> = (avoidAreaOptions) => {
-    this.avoidAreaMap.set(avoidAreaOptions.type, avoidAreaOptions.area)
-    this.updateAvoidArea()
+    if (avoidAreaOptions.type === window.AvoidAreaType.TYPE_SYSTEM
+      || avoidAreaOptions.type === window.AvoidAreaType.TYPE_CUTOUT
+      || avoidAreaOptions.type === window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR) {
+      this.avoidAreaMap.set(avoidAreaOptions.type, avoidAreaOptions.area)
+      this.updateAvoidArea()
+    }
   }
 
   public register(win: window.Window) {
