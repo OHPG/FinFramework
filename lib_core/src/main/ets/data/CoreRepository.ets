@@ -34,12 +34,12 @@ export abstract class CoreRepository {
   /**
    * Client info
    */
-  private readonly clientInfo: ClientInfo
+  protected readonly clientInfo: ClientInfo
 
   /**
    * Device info
    */
-  private readonly deviceInfo: DeviceInfo
+  protected readonly deviceInfo: DeviceInfo
 
   /**
    * Jellyfin api
