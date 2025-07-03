@@ -3,7 +3,7 @@
     "name": "lib_framework_test",
     "type": "feature",
     "deviceTypes": [
-      "default",
+      "phone",
       "tablet",
       "2in1"
     ],
