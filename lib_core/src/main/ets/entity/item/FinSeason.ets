@@ -7,6 +7,6 @@ import { FinItem } from "./FinItem";
  * @Version V1.0
  * @Description
  */
-export interface FinSeason extends FinItem{
+export interface FinSeason extends FinItem {
   
 }

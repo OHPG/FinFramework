@@ -1,4 +1,3 @@
-import { CollectionType } from "@jellyfin/jellyfin"
 import { FinItem } from "./FinItem"
 
 /**

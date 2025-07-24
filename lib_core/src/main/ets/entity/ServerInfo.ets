@@ -1,3 +1,5 @@
+import { ServerType } from "./ServerType"
+
 /**
  * @Author peerless2012
  * @Email peerless2012@126.com
@@ -20,6 +22,6 @@ export interface ServerInfo {
   /**
    * Server Type
    */
-  serverType: string
+  serverType: ServerType
 
 }

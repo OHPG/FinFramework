@@ -1,10 +1,3 @@
-import { ClientInfo, DeviceInfo, Jellyfin,
-  PlaybackProgressInfo,
-  PlaybackStartInfo,
-  PlaybackStopInfo,
-  UserItemDataDto } from "@ohpg/jellyfin"
-import { deviceInfo } from "@kit.BasicServicesKit"
-import { bundleManager } from "@kit.AbilityKit"
 import { ActiveInfo } from "../entity/ActiveInfo"
 import { DataStore } from "../store/DataStore"
 import { ServerInfo } from "../entity/ServerInfo"
@@ -15,6 +8,9 @@ import { MD5 } from "../crypto/MD5"
 import { AppEvents } from "../event/AppEvents"
 import { AppStorageKeys } from "../cons/AppStorageKeys"
 import { VersionTool } from "../tool/VersionTool"
+import { FinApi } from "../api/FinApi"
+import { ServerType } from "../entity/ServerType"
+import { CoreFinApi } from "../api/FinApis"
 
 /**
  * Fin core repository
@@ -31,52 +27,21 @@ export abstract class CoreRepository {
    */
   protected readonly context: Context
 
-  /**
-   * Client info
-   */
-  protected readonly clientInfo: ClientInfo
+  protected readonly finApiMapper: CoreFinApi
 
   /**
-   * Device info
+   * Fin api
    */
-  protected readonly deviceInfo: DeviceInfo
-
-  /**
-   * Jellyfin api
-   */
-  protected jellyfin: Jellyfin
-
-  /**
-   * Jellyfin api tmp
-   */
-  protected jellyfinTmp: Jellyfin
+  protected finApi?: FinApi
 
   protected dataStore: DataStore
 
   protected activeInfo?: ActiveInfo
 
-  constructor(context: Context, module: string) {
+  constructor(context: Context, finApi: CoreFinApi) {
     this.context = context
-    let info = bundleManager.getBundleInfoForSelfSync(bundleManager
-      .BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
-    this.clientInfo = {
-      name: module,
-      version: info.versionName
-    }
-    this.deviceInfo = {
-      // Same developer has same odid.
-      id: MD5.digestSync(deviceInfo.ODID + "-" + module),
-      name: deviceInfo.marketName
-    }
+    this.finApiMapper = finApi
     this.dataStore = new DataStore(context)
-    this.jellyfin = new Jellyfin({
-      clientInfo: this.clientInfo,
-      deviceInfo: this.deviceInfo,
-    })
-    this.jellyfinTmp = new Jellyfin({
-      clientInfo: this.clientInfo,
-      deviceInfo: this.deviceInfo,
-    })
   }
 
   /**
@@ -91,8 +56,7 @@ export abstract class CoreRepository {
   }
 
   private initActiveInfo(activeInfo: ActiveInfo): void {
-    this.jellyfin.apiClient.updateServerInfo({address: activeInfo.addressInfo.address})
-    this.jellyfin.apiClient.updateUserInfo({id: activeInfo.userInfo.userId, token: activeInfo.userInfo.accessToken})
+    this.finApi = this.finApiMapper.activeFinApi(activeInfo)
     this.activeInfo = activeInfo
     this.onActiveInfoChanged()
     AppStorage.setOrCreate(AppStorageKeys.KEY_ACTIVE_INFO, activeInfo)
@@ -167,8 +131,7 @@ export abstract class CoreRepository {
     if (preAddress) {
       throw new Error("Url already exists.")
     }
-    this.jellyfinTmp.apiClient.updateServerInfo({address: url})
-    let systemInfo = await this.jellyfinTmp.getSystemApi().getPublicSystemInfo()
+    let systemInfo = await this.finApi!.getPublicSystemInfo(url)
     if (systemInfo.Id === this.activeInfo!.serverInfo.serverId) {
       let addressInfo: AddressInfo = {
         address: url,
@@ -238,16 +201,18 @@ export abstract class CoreRepository {
    * @param psw
    * @returns
    */
-  public async authAccount(url: string, name: string, psw?: string): Promise<void> {
-    this.jellyfinTmp.apiClient.updateServerInfo({address: url})
-
-    // query server info
-    let systemInfo = await this.jellyfinTmp.getSystemApi().getPublicSystemInfo()
+  public async authAccount(type: ServerType, url: string, name: string, psw?: string): Promise<void> {
+    let finApi = this.finApiMapper.getFinApi(type)
+    let systemInfo = await finApi.getPublicSystemInfo(url)
     if (!systemInfo.StartupWizardCompleted) {
       throw new Error("Server startup wizard not complete.")
     }
-    if (!systemInfo.Version || !VersionTool.isVersionAtLeast(systemInfo.Version, 10, 10)) {
-      throw new Error("Server version must be 10.10.x or above.")
+    if (type === ServerType.JELLYFIN) {
+      if (!systemInfo.Version || !VersionTool.isVersionAtLeast(systemInfo.Version, 10, 10)) {
+        throw new Error("Server version must be 10.10.x or above.")
+      }
+    } else if (type === ServerType.EMBY) {
+      // TODO 判断emby兼容最低的版本
     }
 
     let preServer = await this.dataStore.queryServer(systemInfo.Id!)
@@ -258,7 +223,7 @@ export abstract class CoreRepository {
     let serverInfo: ServerInfo = {
       serverId: systemInfo.Id!,
       serverName: systemInfo.ServerName!,
-      serverType: "Jellyfin"
+      serverType: type
     }
     let addressInfo: AddressInfo = {
       addressId: MD5.digestSync(url),
@@ -267,14 +232,11 @@ export abstract class CoreRepository {
     }
 
     // auth
-    let authResult = await this.jellyfinTmp.getUserApi().authenticateUserByName({
-      Username: name,
-      Pw: psw
-    })
+    let authResult = await this.finApi!.authenticateUserByName(name, psw)
 
     let userInfo: UserInfo = {
-      userId: authResult.User!.Id!,
-      userName: authResult.User!.Name!,
+      userId: authResult.UserId!,
+      userName: authResult.UserName!,
       serverId: authResult.ServerId!,
       accessToken: authResult.AccessToken!
     }
@@ -291,76 +253,14 @@ export abstract class CoreRepository {
    * @returns
    */
   public async addAccount(name: string, psw?: string): Promise<void> {
-    this.jellyfinTmp.apiClient.updateServerInfo({address: this.activeInfo!.addressInfo.address})
-    let authResult = await this.jellyfinTmp.getUserApi().authenticateUserByName({
-      Username: name,
-      Pw: psw
-    })
+    let authResult = await this.finApi!.authenticateUserByName(name, psw)
     let userInfo: UserInfo = {
-      userId: authResult.User!.Id!,
-      userName: authResult.User!.Name!,
+      userId: authResult.UserId!,
+      userName: authResult.UserName!,
       serverId: authResult.ServerId!,
       accessToken: authResult.AccessToken!
     }
     await this.dataStore.insertUser(userInfo)
-  }
-
-  public markFavorite(id: string): Promise<UserItemDataDto> {
-    return this.jellyfin.getUserLibraryApi().markFavoriteItem({
-      itemId: id,
-      userId: this.activeInfo!.userInfo.userId
-    })
-  }
-
-  public unmarkFavorite(id: string): Promise<UserItemDataDto> {
-    return this.jellyfin.getUserLibraryApi().unmarkFavoriteItem({
-      itemId: id,
-      userId: this.activeInfo!.userInfo.userId
-    })
-  }
-
-  public markPlayed(id: string): Promise<UserItemDataDto> {
-    return this.jellyfin.getPlayStateApi().markPlayedItem({
-      itemId: id,
-      userId: this.activeInfo!.userInfo.userId
-    })
-  }
-
-  public unmarkPlayed(id: string): Promise<UserItemDataDto> {
-    return this.jellyfin.getPlayStateApi().markUnplayedItem({
-      itemId: id,
-      userId: this.activeInfo!.userInfo.userId
-    })
-  }
-
-  public onPlaybackStart(itemId: string): Promise<void> {
-    return this.jellyfin.getPlayStateApi().onPlaybackStart({itemId: itemId})
-  }
-
-  public onPlaybackUpdate(itemId: string, position: number, playing: boolean): Promise<void> {
-    return this.jellyfin.getPlayStateApi().onPlaybackProgress({itemId: itemId, positionTicks: position, isPaused: !playing})
-  }
-
-  public onPlaybackStop(itemId: string, position: number): Promise<void> {
-    return this.jellyfin.getPlayStateApi().onPlaybackStopped({itemId: itemId, positionTicks: position})
-  }
-
-  public playbackStart(info: PlaybackStartInfo): Promise<void> {
-    return this.jellyfin.getPlayStateApi().reportPlaybackStart({
-      playbackStartInfo: info
-    })
-  }
-
-  public playbackUpdate(info: PlaybackProgressInfo): Promise<void> {
-    return this.jellyfin.getPlayStateApi().reportPlaybackProgress({
-      playbackProgressInfo: info
-    })
-  }
-
-  public playbackStop(info: PlaybackStopInfo): Promise<void> {
-    return this.jellyfin.getPlayStateApi().reportPlaybackStopped({
-      playbackStopInfo: info
-    })
   }
 
 }

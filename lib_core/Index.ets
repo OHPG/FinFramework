@@ -2,6 +2,7 @@ export { Cipher } from './src/main/ets/crypto/Cipher'
 export { MD5 } from './src/main/ets/crypto/MD5'
 export { DataStore } from './src/main/ets/store/DataStore'
 export { ActiveInfo } from './src/main/ets/entity/ActiveInfo'
+export { ServerType } from './src/main/ets/entity/ServerType'
 export { AddressInfo } from './src/main/ets/entity/AddressInfo'
 export { ServerInfo } from './src/main/ets/entity/ServerInfo'
 export { UserInfo } from './src/main/ets/entity/UserInfo'
@@ -11,8 +12,16 @@ export { LoadState, LoadType } from './src/main/ets/model/LoadState'
 // cons
 export { AppStorageKeys } from './src/main/ets/cons/AppStorageKeys'
 
+// api
+export { FinApi } from './src/main/ets/api/FinApi'
+export { FinApis } from './src/main/ets/api/FinApis'
+
 // data
 export { CoreRepository } from './src/main/ets/data/CoreRepository'
+
+// entity
+export { FinItem } from './src/main/ets/entity/item/FinItem'
+
 
 // lifecycle
 export { ViewModel } from './src/main/ets/lifecycle/vm/ViewModel'
