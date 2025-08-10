@@ -52,7 +52,7 @@ export abstract class StoreHelper {
   }
 
   private async getStore(writable: boolean): Promise<relationalStore.RdbStore> {
-    // return this.storeLock.lockAsync(async () => {
+    return this.storeLock.lockAsync(async () => {
       if (this.store) {
         return this.store
       }
@@ -66,6 +66,9 @@ export abstract class StoreHelper {
           this.store.beginTransaction()
           if (version == 0) {
             await this.onCreate(this.store)
+            if (this.newVersion > 1) {
+              await this.onUpgrade(this.store, 1, this.newVersion)
+            }
           } else {
             await this.onUpgrade(this.store, version, this.newVersion)
           }
@@ -79,7 +82,7 @@ export abstract class StoreHelper {
         }
       }
       return this.store
-    // })
+    })
   }
 
   /**
