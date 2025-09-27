@@ -12,7 +12,7 @@ export interface FinMovie extends FinItem {
 
   premiereDate: string
 
-  people?: Array<BaseItemPerson>
+  person?: Array<BaseItemPerson>
 
   genres?: Array<String>
 

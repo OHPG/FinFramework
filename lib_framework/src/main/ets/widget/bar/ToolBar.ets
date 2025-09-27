@@ -19,7 +19,7 @@ export struct ToolBar {
 
       Column()
         .width('100%')
-        .height(px2vp(this.avoidArea?.topRect.height))
+        .height(this.getUIContext().px2vp(this.avoidArea?.topRect.height))
 
       Row({space: CommonConstants.SPACE_16}) {
         Image($r('sys.media.ohos_ic_compnent_titlebar_back_filled'))
@@ -28,7 +28,7 @@ export struct ToolBar {
           .width($r('sys.float.titlebar_icon_width'))
           .height($r('sys.float.titlebar_icon_width'))
           .onClick(() => {
-            router.back()
+            this.getUIContext().getRouter().back()
           })
 
         // 标题
@@ -40,7 +40,7 @@ export struct ToolBar {
           .maxLines(1)
           .layoutWeight(1)
           .onClick(() => {
-            router.back()
+            this.getUIContext().getRouter().back()
           })
 
           // 自定义菜单

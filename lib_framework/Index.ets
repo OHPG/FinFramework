@@ -2,6 +2,7 @@ export { FinRouter } from './src/main/ets/pages/FinRouter';
 
 // data
 export { FinRepository } from './src/main/ets/data/FinRepository'
+export { FinApi } from './src/main/ets/api/FinApi'
 
 // common
 export { CommonConstants } from './src/main/ets/common/CommonConstants'

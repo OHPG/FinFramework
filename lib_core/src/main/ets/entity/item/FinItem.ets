@@ -1,4 +1,6 @@
 import { FinImage } from "./FinImage"
+import { FinItemType } from "./FinItemType"
+import { FinPerson } from "./FinPerson"
 import { FinSource } from "./FinSource"
 
 /**
@@ -14,25 +16,35 @@ export interface FinItem {
 
   name: string
 
+  type?: FinItemType
+
   originalTitle?: String
 
-  overview: string
+  overview?: string
 
-  played: boolean
+  played?: boolean
 
-  favorite: boolean
+  favorite?: boolean
 
-  canPlay: boolean
+  canPlay?: boolean
 
-  canDownload: boolean
+  canDownload?: boolean
 
   sources?: Array<FinSource>
 
-  runtimeTicks: number
+  runtimeTicks?: number
 
-  playbackPositionTicks: number
+  playbackPositionTicks?: number
 
   unplayedItemCount?: number
 
-  image: FinImage
+  productionYear?: string
+
+  officialRating?: string
+
+  communityRating?: string
+
+  image?: FinImage
+
+  person?: Array<FinPerson>
 }

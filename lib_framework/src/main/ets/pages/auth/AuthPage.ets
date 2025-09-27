@@ -1,5 +1,4 @@
-import { CoreRepository, StringTool } from '@ohpg/fin-core'
-import { promptAction, router } from '@kit.ArkUI'
+import { CoreRepository, ServerType, StringTool } from '@ohpg/fin-core'
 import { FinPages } from '../FinPages'
 import { ProgressDialog } from '../../dialog/ProgressDialog'
 import { bundleManager, common } from '@kit.AbilityKit'
@@ -35,11 +34,11 @@ struct AuthPage {
 
   aboutToAppear(): void {
     let bundleInfo = bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
-    let resourceManager = getContext().resourceManager
+    let resourceManager = this.getUIContext().getHostContext()!.resourceManager
     this.appIcon = resourceManager.getDrawableDescriptor(bundleInfo.appInfo.iconResource)
     this.appName = resourceManager.getStringSync(bundleInfo.appInfo.labelResource)
     this.progressDialog = new ProgressDialog(this.getUIContext())
-    this.canBack = Number.parseInt(router.getLength()) > 1
+    this.canBack = Number.parseInt(this.getUIContext().getRouter().getLength()) > 1
   }
 
   build() {
@@ -145,36 +144,36 @@ struct AuthPage {
 
   private onAuth() {
     if (!this.url || this.url.length <= 0) {
-      promptAction.showToast({message: $r('app.string.error_url_empty')})
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_empty')})
       return
     }
     if (!this.url.startsWith('http')) {
-      promptAction.showToast({message: $r('app.string.error_url_not_start_with_http')})
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_not_start_with_http')})
       return
     }
     if (!StringTool.isUrlValid(this.url)) {
-      promptAction.showToast({message: $r('app.string.error_url_not_validate')})
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_not_validate')})
       return
     }
     if (!this.userName || this.userName.length <= 0) {
-      promptAction.showToast({message: $r('app.string.error_user_name_empty')})
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_name_empty')})
       return
     }
     this.progressDialog?.show()
-    this.repository?.authAccount(this.url!, this.userName, this.psw)
+    this.repository?.authAccount(ServerType.JELLYFIN, this.url!, this.userName, this.psw)
       .then(() => {
         this.progressDialog?.dismiss()
-        let state = router.getStateByIndex(0)
+        let state = this.getUIContext().getRouter().getStateByIndex(0)
         if (state?.name == "pages/home/HomePage") {
-          router.back(0)
+          this.getUIContext().getRouter().back(0)
         } else {
-          (getContext() as common.UIAbilityContext).windowStage
+          (this.getUIContext().getHostContext() as common.UIAbilityContext).windowStage
             .loadContent("pages/home/HomePage")
         }
       })
       .catch((error: Error) => {
         this.progressDialog?.dismiss()
-        promptAction.showToast({message: error.message})
+        this.getUIContext().getPromptAction().showToast({message: error.message})
       })
   }
 

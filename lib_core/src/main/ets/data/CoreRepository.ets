@@ -8,9 +8,9 @@ import { MD5 } from "../crypto/MD5"
 import { AppEvents } from "../event/AppEvents"
 import { AppStorageKeys } from "../cons/AppStorageKeys"
 import { VersionTool } from "../tool/VersionTool"
-import { FinApi } from "../api/FinApi"
+import { CoreApi } from "../api/CoreApi"
 import { ServerType } from "../entity/ServerType"
-import { CoreFinApi } from "../api/FinApis"
+import { ApiFactory } from "../api/ApiFactory"
 
 /**
  * Fin core repository
@@ -27,21 +27,39 @@ export abstract class CoreRepository {
    */
   protected readonly context: Context
 
-  protected readonly finApiMapper: CoreFinApi
+  /**
+   * Date store
+   */
+  protected readonly dataStore: DataStore
+
+  /**
+   * Api factory
+   */
+  private readonly apiFactory: ApiFactory
 
   /**
    * Fin api
    */
-  protected finApi?: FinApi
+  private finApi?: CoreApi
 
-  protected dataStore: DataStore
+  /**
+   * Auth api
+   */
+  private authApi?: CoreApi
 
+  /**
+   * Active info
+   */
   protected activeInfo?: ActiveInfo
 
-  constructor(context: Context, finApi: CoreFinApi) {
+  constructor(context: Context, factory: ApiFactory) {
     this.context = context
-    this.finApiMapper = finApi
+    this.apiFactory = factory
     this.dataStore = new DataStore(context)
+  }
+
+  protected requireApi(): CoreApi {
+    return this.finApi!
   }
 
   /**
@@ -56,8 +74,12 @@ export abstract class CoreRepository {
   }
 
   private initActiveInfo(activeInfo: ActiveInfo): void {
-    this.finApi = this.finApiMapper.activeFinApi(activeInfo)
     this.activeInfo = activeInfo
+    let type = activeInfo.serverInfo.serverType
+    if (this.finApi?.getApiType() !== type) {
+      this.finApi = this.apiFactory.createApi(type)
+    }
+    this.finApi.updateActiveInfo(activeInfo)
     this.onActiveInfoChanged()
     AppStorage.setOrCreate(AppStorageKeys.KEY_ACTIVE_INFO, activeInfo)
     AppEventHub.emit(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
@@ -202,8 +224,11 @@ export abstract class CoreRepository {
    * @returns
    */
   public async authAccount(type: ServerType, url: string, name: string, psw?: string): Promise<void> {
-    let finApi = this.finApiMapper.getFinApi(type)
-    let systemInfo = await finApi.getPublicSystemInfo(url)
+    if (this.authApi?.getApiType() !== type) {
+      this.authApi = this.apiFactory.createApi(type)
+    }
+    this.authApi.updateAddress(url)
+    let systemInfo = await this.authApi.getPublicSystemInfo(url)
     if (!systemInfo.StartupWizardCompleted) {
       throw new Error("Server startup wizard not complete.")
     }
@@ -232,7 +257,7 @@ export abstract class CoreRepository {
     }
 
     // auth
-    let authResult = await this.finApi!.authenticateUserByName(name, psw)
+    let authResult = await this.authApi.authenticateUserByName(name, psw)
 
     let userInfo: UserInfo = {
       userId: authResult.UserId!,
@@ -253,7 +278,7 @@ export abstract class CoreRepository {
    * @returns
    */
   public async addAccount(name: string, psw?: string): Promise<void> {
-    let authResult = await this.finApi!.authenticateUserByName(name, psw)
+    let authResult = await this.requireApi().authenticateUserByName(name, psw)
     let userInfo: UserInfo = {
       userId: authResult.UserId!,
       userName: authResult.UserName!,

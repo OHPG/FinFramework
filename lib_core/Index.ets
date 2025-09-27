@@ -13,14 +13,21 @@ export { LoadState, LoadType } from './src/main/ets/model/LoadState'
 export { AppStorageKeys } from './src/main/ets/cons/AppStorageKeys'
 
 // api
-export { FinApi } from './src/main/ets/api/FinApi'
-export { FinApis } from './src/main/ets/api/FinApis'
+export { CoreApi } from './src/main/ets/api/CoreApi'
+export { ApiFactory } from './src/main/ets/api/ApiFactory'
 
 // data
 export { CoreRepository } from './src/main/ets/data/CoreRepository'
 
 // entity
 export { FinItem } from './src/main/ets/entity/item/FinItem'
+export { FinItemType } from './src/main/ets/entity/item/FinItemType'
+export { FinItemData } from './src/main/ets/entity/item/FinItemData'
+export { FinAuthResult } from './src/main/ets/entity/item/FinAuthResult'
+export { FinPublicSystemInfo } from './src/main/ets/entity/item/FinPublickSystemInfo'
+export { FinPerson } from './src/main/ets/entity/item/FinPerson'
+export { FinPersonType } from './src/main/ets/entity/item/FinPersonType'
+export { FinSource } from './src/main/ets/entity/item/FinSource'
 
 
 // lifecycle

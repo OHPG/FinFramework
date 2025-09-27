@@ -7,7 +7,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@abner/refresh": "1.4.3",
-    "@ohpg/fin-core": "file:../lib_core",
-    "@ohpg/jellyfin": "file:../../FinSdk/jellyfin"
+    "@ohpg/fin-core": "file:../lib_core"
   }
 }

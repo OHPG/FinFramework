@@ -1,5 +1,8 @@
+import { ActiveInfo } from "../entity/ActiveInfo";
+import { ServerType } from "../entity/ServerType";
 import { FinAuthResult } from "../entity/item/FinAuthResult";
 import { FinPublicSystemInfo } from "../entity/item/FinPublickSystemInfo";
+import { AddressInfo } from "../entity/AddressInfo";
 
 /**
  * @Author peerless2012
@@ -8,7 +11,25 @@ import { FinPublicSystemInfo } from "../entity/item/FinPublickSystemInfo";
  * @Version V1.0
  * @Description Fin Api
  */
-export interface FinApi {
+export interface CoreApi {
+
+  /**
+   * 获取当前接口类型
+   * @returns
+   */
+  getApiType(): ServerType
+
+  /**
+   * 更新地址信息
+   * @param address
+   */
+  updateAddress(address: string): void
+
+  /**
+   * 更新信息
+   * @param activeInfo
+   */
+  updateActiveInfo(activeInfo: ActiveInfo): void
 
   /**
    * 获取服务器公开信息

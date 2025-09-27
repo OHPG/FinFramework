@@ -9,6 +9,7 @@ import { AddressInfoTable } from "./table/AddressInfoTable";
 import { UserInfoTable } from "./table/UserInfoTable";
 import { ActiveInfo } from "../entity/ActiveInfo";
 import { ActiveInfoTable } from "./table/ActiveInfoTable";
+import { ServerType } from "../entity/ServerType";
 
 /**
  * @Author peerless2012
@@ -126,7 +127,7 @@ export class DataStore {
       serverInfoArray.push({
         serverId: resultSet.getString(serverIdIndex),
         serverName: resultSet.getString(serverNameIndex),
-        serverType: resultSet.getString(serverTypeIndex)
+        serverType: resultSet.getString(serverTypeIndex) as ServerType
       })
     }
     return serverInfoArray
@@ -151,7 +152,7 @@ export class DataStore {
     return {
       serverId: resultSet.getString(serverIdIndex),
       serverName: resultSet.getString(serverNameIndex),
-      serverType: resultSet.getString(serverTypeIndex)
+      serverType: resultSet.getString(serverTypeIndex) as ServerType
     }
   }
 

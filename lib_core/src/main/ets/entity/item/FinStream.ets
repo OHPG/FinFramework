@@ -1,4 +1,5 @@
-import { MediaStreamType, VideoRangeType } from "@jellyfin-harmony/sdk"
+import { FinStreamType } from "./FinStreamType"
+import { FinVideoRangeType } from "./FinVideoRangeType"
 
 /**
  * @Author peerless2012
@@ -15,7 +16,7 @@ export interface FinStream {
 
   language: string
 
-  type: MediaStreamType
+  type: FinStreamType
 
   codec: string
 
@@ -25,7 +26,7 @@ export interface FinStream {
 
   channelLayout?: string
 
-  videoRangeType?: VideoRangeType
+  videoRangeType?: FinVideoRangeType
 
   width?: number
 

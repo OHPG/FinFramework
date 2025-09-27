@@ -1,24 +1,18 @@
-import { MD5 } from "../crypto/MD5"
-import { FinApi } from "./FinApi"
-import { ClientInfo, DeviceInfo } from "@ohpg/network"
-import { bundleManager } from "@kit.AbilityKit"
-import { deviceInfo } from "@kit.BasicServicesKit"
-import { ServerType } from "../entity/ServerType"
-import { ActiveInfo } from "../entity/ActiveInfo"
+import { MD5 } from "../crypto/MD5";
+import { CoreApi } from "./CoreApi";
+import { ServerType } from "../entity/ServerType";
+import { bundleManager } from "@kit.AbilityKit";
+import { deviceInfo } from "@kit.BasicServicesKit";
+import { ClientInfo, DeviceInfo } from "@ohpg/network";
 
 /**
  * @Author peerless2012
  * @Email peerless2012@126.com
- * @DateTime 2025/7/6 14:34
+ * @DateTime 2025/9/27 19:54
  * @Version V1.0
  * @Description
  */
-export abstract class FinApis {
-
-  /**
-   * FinApi key
-   */
-  public static readonly FIN_API = "FinApi"
+export abstract class ApiFactory {
 
   /**
    * Context info
@@ -50,16 +44,10 @@ export abstract class FinApis {
     }
   }
 
-  abstract activeFinApi(activeInfo: ActiveInfo): FinApi {
-    this.finApi.updateUserInfo({id: activeInfo.userInfo.userId, token: activeInfo.userInfo.accessToken})
-  }
+  protected abstract onCreateApi<T extends CoreApi>(serverType: ServerType): T;
 
-  public getFinApi(type: ServerType): FinApi {
-
-  }
-
-  public setFinApi(type: ServerType): void {
-
+  public createApi<T extends CoreApi>(type: ServerType): T {
+    return this.onCreateApi(type) as T
   }
 
 }
