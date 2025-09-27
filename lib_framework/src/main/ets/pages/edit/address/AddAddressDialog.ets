@@ -1,7 +1,7 @@
 import { Dialog } from "../../../dialog/Dialog";
 import { ComponentContent, promptAction } from "@kit.ArkUI";
 import { FinRepository } from "../../../data/FinRepository";
-
+import { StringTool } from '@ohpg/fin-core'
 /**
  * @Author peerless2012
  * @Email peerless2012@126.com
@@ -98,7 +98,15 @@ struct addAddressComponent {
   }
 
   private verifyAddress() {
-    if (!this.url) {
+    if (!this.url || this.url.length <= 0) {
+      promptAction.showToast({message: $r('app.string.error_url_empty')})
+      return
+    }
+    if (!this.url.startsWith('http')) {
+      promptAction.showToast({message: $r('app.string.error_url_not_start_with_http')})
+      return
+    }
+    if (!StringTool.isUrlValid(this.url)) {
       promptAction.showToast({message: $r('app.string.error_url_not_validate')})
       return
     }

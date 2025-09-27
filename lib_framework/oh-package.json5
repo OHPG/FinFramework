@@ -1,7 +1,7 @@
 {
   "name": "@ohpg/fin-framework",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
+  "description": "Fin framework sdk.",
   "main": "Index.ets",
   "author": "peerless2012",
   "license": "Apache-2.0",
