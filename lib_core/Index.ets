@@ -16,6 +16,10 @@ export { AppStorageKeys } from './src/main/ets/cons/AppStorageKeys'
 export { CoreApi } from './src/main/ets/api/CoreApi'
 export { ApiFactory } from './src/main/ets/api/ApiFactory'
 
+// cache
+export { LruCache } from './src/main/ets/cache/LruCache'
+export { ImageLruCache } from './src/main/ets/cache/ImageLruCache'
+
 // data
 export { CoreRepository } from './src/main/ets/data/CoreRepository'
 
