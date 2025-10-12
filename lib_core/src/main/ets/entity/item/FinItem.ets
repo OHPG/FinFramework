@@ -30,6 +30,8 @@ export interface FinItem {
 
   canDownload?: boolean
 
+  path?: string
+
   sources?: Array<FinSource>
 
   runtimeTicks?: number
