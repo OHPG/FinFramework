@@ -7,4 +7,22 @@
  */
 export interface FinItemData {
 
+  rating?: number
+
+  playPercentage?: number
+
+  unplayedItemCount?: number
+
+  playedPositionTicks?: number
+
+  playCount?: number
+
+  isFavorite?: boolean
+
+  likes?: boolean
+
+  lastPlayDate?: string
+
+  played?: boolean
+
 }

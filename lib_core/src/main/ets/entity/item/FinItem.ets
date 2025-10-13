@@ -1,4 +1,5 @@
 import { FinImage } from "./FinImage"
+import { FinItemData } from "./FinItemData"
 import { FinItemType } from "./FinItemType"
 import { FinPerson } from "./FinPerson"
 import { FinSource } from "./FinSource"
@@ -49,4 +50,6 @@ export interface FinItem {
   image?: FinImage
 
   person?: Array<FinPerson>
+
+  data?: FinItemData
 }
