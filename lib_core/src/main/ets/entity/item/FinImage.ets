@@ -14,4 +14,6 @@ export interface FinImage {
   logo?: string
 
   showPrimary?: string
+
+  header?: Record<string, string>
 }

@@ -142,7 +142,7 @@ struct AuthPage {
     }
   }
 
-  private onAuth() {
+  private async onAuth() {
     if (!this.url || this.url.length <= 0) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_empty')})
       return
@@ -159,8 +159,8 @@ struct AuthPage {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_name_empty')})
       return
     }
-    this.progressDialog?.show()
-    this.repository?.authAccount(ServerType.JELLYFIN, this.url!, this.userName, this.psw)
+    await this.progressDialog?.show()
+    this.repository?.authAccount(ServerType.KOMGA, this.url!, this.userName, this.psw)
       .then(() => {
         this.progressDialog?.dismiss()
         let state = this.getUIContext().getRouter().getStateByIndex(0)

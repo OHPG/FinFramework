@@ -2,7 +2,6 @@ import { ActiveInfo } from "../entity/ActiveInfo";
 import { ServerType } from "../entity/ServerType";
 import { FinAuthResult } from "../entity/item/FinAuthResult";
 import { FinPublicSystemInfo } from "../entity/item/FinPublickSystemInfo";
-import { AddressInfo } from "../entity/AddressInfo";
 
 /**
  * @Author peerless2012
@@ -36,7 +35,13 @@ export interface CoreApi {
    * @param url 服务器地址
    * @returns 服务器公开信息
    */
-  getPublicSystemInfo(url: string): Promise<FinPublicSystemInfo>
+  getPublicSystemInfo(url: string, name?: string, psw?: string): Promise<FinPublicSystemInfo>
+
+  /**
+   * 获取服务器信息
+   * @returns
+   */
+  getSystemInfo(url?: string): Promise<FinPublicSystemInfo>
 
   /**
    * 认证用户

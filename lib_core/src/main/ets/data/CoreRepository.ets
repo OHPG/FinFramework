@@ -1,10 +1,10 @@
+import { MD5 } from "../crypto/MD5"
 import { ActiveInfo } from "../entity/ActiveInfo"
 import { DataStore } from "../store/DataStore"
 import { ServerInfo } from "../entity/ServerInfo"
 import { AddressInfo } from "../entity/AddressInfo"
 import { UserInfo } from "../entity/UserInfo"
 import { AppEventHub } from "../event/EventHub"
-import { MD5 } from "../crypto/MD5"
 import { AppEvents } from "../event/AppEvents"
 import { AppStorageKeys } from "../cons/AppStorageKeys"
 import { VersionTool } from "../tool/VersionTool"
@@ -153,7 +153,7 @@ export abstract class CoreRepository {
     if (preAddress) {
       throw new Error("Url already exists.")
     }
-    let systemInfo = await this.finApi!.getPublicSystemInfo(url)
+    let systemInfo = await this.finApi!.getSystemInfo(url)
     if (systemInfo.Id === this.activeInfo!.serverInfo.serverId) {
       let addressInfo: AddressInfo = {
         address: url,
@@ -228,7 +228,7 @@ export abstract class CoreRepository {
       this.authApi = this.apiFactory.createApi(type)
     }
     this.authApi.updateAddress(url)
-    let systemInfo = await this.authApi.getPublicSystemInfo(url)
+    let systemInfo = await this.authApi.getPublicSystemInfo(url, name, psw)
     if (!systemInfo.StartupWizardCompleted) {
       throw new Error("Server startup wizard not complete.")
     }
