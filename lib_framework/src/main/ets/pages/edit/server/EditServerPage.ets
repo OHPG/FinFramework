@@ -1,11 +1,11 @@
-import { ServerInfo } from '@ohpg/fin-core'
+import { ServerInfo, ServerType } from '@ohpg/fin-core'
 import { ToolBar } from '../../../widget/bar/ToolBar'
 import { ListRefreshView } from '../../../widget/refresh/ListRefreshView'
 import { CommonConstants } from '../../../common/CommonConstants'
 import { EditServerViewModel } from './EditServerViewModel'
+import { FinRepository } from '../../../data/FinRepository'
 import { FinPages } from '../../FinPages'
 import { FinRouter } from '../../FinRouter'
-import { FinRepository } from '../../../data/FinRepository'
 
 @Preview
 @Entry({routeName: FinPages.PAGE_FIN_EDIT_SERVER})
@@ -59,7 +59,7 @@ struct EditServerPage {
   }
 
   private onAddServer() {
-    FinRouter.auth()
+    FinRouter.auth(this.getUIContext(), ServerType.KOMGA)
   }
 }
 

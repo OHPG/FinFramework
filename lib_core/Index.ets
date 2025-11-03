@@ -32,6 +32,7 @@ export { FinPublicSystemInfo } from './src/main/ets/entity/item/FinPublickSystem
 export { FinPerson } from './src/main/ets/entity/item/FinPerson'
 export { FinPersonType } from './src/main/ets/entity/item/FinPersonType'
 export { FinSource } from './src/main/ets/entity/item/FinSource'
+export { FinImage } from './src/main/ets/entity/item/FinImage'
 
 
 // lifecycle

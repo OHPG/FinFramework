@@ -22,7 +22,7 @@
     },
     {
       "name": "login_auth_tips",
-      "value": "*仅支持Jellyfin协议*"
+      "value": "*仅支持%s协议*"
     },
     {
       "name": "error_url_empty",

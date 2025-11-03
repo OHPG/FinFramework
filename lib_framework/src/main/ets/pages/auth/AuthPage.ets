@@ -3,6 +3,7 @@ import { FinPages } from '../FinPages'
 import { ProgressDialog } from '../../dialog/ProgressDialog'
 import { bundleManager, common } from '@kit.AbilityKit'
 import { ToolBar } from '../../widget/bar/ToolBar'
+import { AuthParam } from './AuthParam'
 
 /**
  * @Author peerless2012
@@ -15,6 +16,8 @@ import { ToolBar } from '../../widget/bar/ToolBar'
 @Entry({routeName: FinPages.PAGE_FIN_ADD_SERVER})
 @Component
 struct AuthPage {
+
+  private param: AuthParam = this.getUIContext().getRouter().getParams() as AuthParam
 
   private appIcon?: DrawableDescriptor
 
@@ -127,7 +130,7 @@ struct AuthPage {
             this.onAuth()
           })
 
-        Text($r('app.string.login_auth_tips'))
+        Text($r('app.string.login_auth_tips', this.param.type))
           .fontSize($r('sys.float.ohos_id_text_size_sub_title3'))
           .fontColor($r('sys.color.font_secondary'))
           .margin(36)
@@ -160,7 +163,7 @@ struct AuthPage {
       return
     }
     await this.progressDialog?.show()
-    this.repository?.authAccount(ServerType.KOMGA, this.url!, this.userName, this.psw)
+    this.repository?.authAccount(this.param.type, this.url!, this.userName, this.psw)
       .then(() => {
         this.progressDialog?.dismiss()
         let state = this.getUIContext().getRouter().getStateByIndex(0)

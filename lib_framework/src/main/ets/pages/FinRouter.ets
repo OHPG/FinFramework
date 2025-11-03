@@ -1,4 +1,5 @@
-import { router } from "@kit.ArkUI";
+import { ServerType } from "@ohpg/fin-core";
+import { AuthParam } from "./auth/AuthParam";
 import { FinPages } from "./FinPages";
 
 /**
@@ -14,12 +15,16 @@ export class FinRouter {
    * Add server
    * @returns
    */
-  public static async auth(replace?: boolean): Promise<void> {
+  public static async auth(context: UIContext, type: ServerType, replace?: boolean): Promise<void> {
     await import ("./auth/AuthPage")
+    let router = context.getRouter()
+    let param: AuthParam = {
+      type: type
+    }
     if (replace) {
-      await router.replaceNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER})
+      await router.replaceNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER, params: param})
     } else {
-      await router.pushNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER})
+      await router.pushNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER, params: param})
     }
   }
 
@@ -27,8 +32,9 @@ export class FinRouter {
    * Edit server
    * @returns
    */
-  public static async editServer(): Promise<void> {
+  public static async editServer(context: UIContext): Promise<void> {
     await import ("./edit/server/EditServerPage")
+    let router = context.getRouter()
     await router.pushNamedRoute({name: FinPages.PAGE_FIN_EDIT_SERVER})
   }
 
@@ -36,8 +42,9 @@ export class FinRouter {
    * Edit address
    * @returns
    */
-  public static async editAddress(): Promise<void> {
+  public static async editAddress(context: UIContext): Promise<void> {
     await import ('./edit/address/EditAddressPage')
+    let router = context.getRouter()
     await router.pushNamedRoute({name: FinPages.PAGE_FIN_EDIT_ADDRESS})
   }
 
@@ -45,8 +52,9 @@ export class FinRouter {
    * Edit user
    * @returns
    */
-  public static async editUser(): Promise<void> {
+  public static async editUser(context: UIContext): Promise<void> {
     await import ('./edit/user/EditUserPage')
+    let router = context.getRouter()
     await router.pushNamedRoute({name: FinPages.PAGE_FIN_EDIT_USER})
   }
 

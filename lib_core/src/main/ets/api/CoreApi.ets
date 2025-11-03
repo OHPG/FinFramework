@@ -79,4 +79,10 @@ export interface CoreApi {
    */
   markUnplayedItem(id: string): Promise<void>
 
+  /**
+   * 释放资源
+   * @returns
+   */
+  release(): Promise<void>
+
 }
