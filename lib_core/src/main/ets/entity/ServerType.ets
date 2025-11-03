@@ -18,7 +18,7 @@ export enum ServerType {
   EMBY = "Emby",
 
   /**
-   * Emby server
+   * Komga server
    */
   KOMGA = "Komga"
 
