@@ -33,9 +33,10 @@ export interface CoreApi {
   /**
    * 获取服务器公开信息
    * @param url 服务器地址
+   * @param name 服务器名称
    * @returns 服务器公开信息
    */
-  getPublicSystemInfo(url: string, name?: string, psw?: string): Promise<FinPublicSystemInfo>
+  getPublicSystemInfo(url: string, name?: string): Promise<FinPublicSystemInfo>
 
   /**
    * 获取服务器信息

@@ -64,7 +64,7 @@ struct AuthPage {
           })
           .alignRules({
             middle: { anchor: "__container__", align: HorizontalAlign.Center },
-            center: { anchor: "__container__", align: VerticalAlign.Center },
+            top: { anchor: "__container__", align: VerticalAlign.Center },
           })
           .onChange((value) => {
             this.userName = value
@@ -111,7 +111,7 @@ struct AuthPage {
           })
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
-            bottom: { anchor: "user_name", align: VerticalAlign.Top}
+            bottom: { anchor: "__container__", align: VerticalAlign.Center}
           })
           .margin({
             bottom: 15

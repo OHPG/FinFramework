@@ -225,14 +225,14 @@ export abstract class CoreRepository {
    * @param psw
    * @returns
    */
-  public async authAccount(type: ServerType, url: string, name: string, psw?: string): Promise<void> {
+  public async authAccount(type: ServerType, name: string, url: string, userName: string, userPsw?: string): Promise<void> {
     if (this.authApi?.getApiType() !== type) {
       this.authApi?.release()
       this.authApi = undefined
       this.authApi = this.apiFactory.createApi(type)
     }
     this.authApi.updateAddress(url)
-    let systemInfo = await this.authApi.getPublicSystemInfo(url, name, psw)
+    let systemInfo = await this.authApi.getPublicSystemInfo(url, name)
     if (!systemInfo.StartupWizardCompleted) {
       throw new Error("Server startup wizard not complete.")
     }
@@ -261,7 +261,7 @@ export abstract class CoreRepository {
     }
 
     // auth
-    let authResult = await this.authApi.authenticateUserByName(name, psw)
+    let authResult = await this.authApi.authenticateUserByName(userName, userPsw)
 
     let userInfo: UserInfo = {
       userId: authResult.UserId!,
