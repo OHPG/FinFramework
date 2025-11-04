@@ -77,6 +77,8 @@ export abstract class CoreRepository {
     this.activeInfo = activeInfo
     let type = activeInfo.serverInfo.serverType
     if (this.finApi?.getApiType() !== type) {
+      this.finApi?.release()
+      this.finApi = undefined
       this.finApi = this.apiFactory.createApi(type)
     }
     this.finApi.updateActiveInfo(activeInfo)
@@ -225,6 +227,8 @@ export abstract class CoreRepository {
    */
   public async authAccount(type: ServerType, url: string, name: string, psw?: string): Promise<void> {
     if (this.authApi?.getApiType() !== type) {
+      this.authApi?.release()
+      this.authApi = undefined
       this.authApi = this.apiFactory.createApi(type)
     }
     this.authApi.updateAddress(url)
