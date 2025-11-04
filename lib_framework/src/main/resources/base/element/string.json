@@ -1,6 +1,10 @@
 {
   "string": [
     {
+      "name": "server_name",
+      "value": "名称"
+    },
+    {
       "name": "server_address",
       "value": "服务器地址"
     },
@@ -25,6 +29,10 @@
       "value": "*仅支持%s协议*"
     },
     {
+      "name": "error_name_empty",
+      "value": "名称不能为空"
+    },
+    {
       "name": "error_url_empty",
       "value": "服务器地址不能为空"
     },
@@ -39,6 +47,10 @@
     {
       "name": "error_user_name_empty",
       "value": "用户名不能为空"
+    },
+    {
+      "name": "error_user_psw_empty",
+      "value": "密码不能为空"
     },
     {
       "name": "page_server",

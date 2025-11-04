@@ -23,6 +23,8 @@ struct AuthPage {
 
   private appName?: string
 
+  private name?: string
+
   private url?: string
 
   private userName?: string
@@ -85,6 +87,22 @@ struct AuthPage {
             this.psw = value
           })
 
+        TextInput({ placeholder: $r('app.string.server_name') })
+          .id("server_name")
+          .constraintSize({
+            maxWidth: 300
+          })
+          .alignRules({
+            middle: {anchor: "__container__", align: HorizontalAlign.Center},
+            bottom: { anchor: "server_address", align: VerticalAlign.Top}
+          })
+          .margin({
+            bottom: 15
+          })
+          .onChange((value) => {
+            this.name = value
+          })
+
         TextInput({ placeholder: $r('app.string.server_address') })
           .id("server_address")
           .type(InputType.URL)
@@ -108,7 +126,7 @@ struct AuthPage {
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
             top: { anchor: "__container__", align: VerticalAlign.Top},
-            bottom: { anchor: "server_address", align: VerticalAlign.Top}
+            bottom: { anchor: "server_name", align: VerticalAlign.Top}
           })
 
 
@@ -146,24 +164,40 @@ struct AuthPage {
   }
 
   private async onAuth() {
-    if (!this.url || this.url.length <= 0) {
+    let name = this.name?.trim()
+    if (!name || name.length <= 0) {
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_name_empty')})
+      return
+    }
+
+    let url = this.url?.trim()
+    if (!url || url.length <= 0) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_empty')})
       return
     }
-    if (!this.url.startsWith('http')) {
+    if (!url.startsWith('http')) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_not_start_with_http')})
       return
     }
-    if (!StringTool.isUrlValid(this.url)) {
+    if (!StringTool.isUrlValid(url)) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_not_validate')})
       return
     }
-    if (!this.userName || this.userName.length <= 0) {
+
+    let userName = this.userName?.trim()
+    if (!userName || userName.length <= 0) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_name_empty')})
       return
     }
+
+    let userPsw = this.psw?.trim()
+    if (!userPsw || userPsw.length <= 0) {
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_psw_empty')})
+      return
+    }
+
     await this.progressDialog?.show()
-    this.repository?.authAccount(this.param.type, this.url!, this.userName, this.psw)
+    this.repository?.authAccount(this.param.type, url, userName, userPsw, name)
       .then(() => {
         this.progressDialog?.dismiss()
         let state = this.getUIContext().getRouter().getStateByIndex(0)
