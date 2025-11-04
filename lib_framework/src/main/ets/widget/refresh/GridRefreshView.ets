@@ -1,16 +1,18 @@
-import { AppEventHub, AppEvents, AppModel } from "@ohpg/fin-core"
-import { LoadType } from "@ohpg/fin-core"
+import { AppModel } from "@ohpg/fin-core"
 import { GridAttr, GridView, RefreshController } from '@abner/refresh';
 import { CommonConstants } from "../../common/CommonConstants"
 import { emptyStateViewBuilder } from "../state/EmptyStateView"
 import { ErrorStateView } from "../state/ErrorStateView"
 import { loadStateBuilder } from "../state/LoadStateView"
 import { RefreshRepository } from "./RefreshRepository"
+import { LoadHelper } from "./LoadHelper";
 
 @Component
 export struct GridRefreshView {
 
   private controller = new RefreshController()
+
+  @State model: AppModel = new AppModel()
 
   @Require source?: RefreshRepository
 
@@ -19,22 +21,18 @@ export struct GridRefreshView {
 
   gridAttribute?: (attribute: GridAttr) => void;
 
-  @State model: AppModel = new AppModel()
-
-  private activeInfoChanged = () => {
-    this.loadData('Refresh')
-  }
+  private loader?: LoadHelper
 
   aboutToAppear(): void {
-    this.loadData()
-    AppEventHub.on(AppEvents.EVENT_ACTIVE_INFO_CHANGED, this.activeInfoChanged)
+    this.loader= new LoadHelper(this.model, this.source!, this.controller)
+    this.loader.load()
   }
 
   @Builder
   private errorStateBuilder() {
     ErrorStateView({
       callback: () => {
-        this.loadData('Init')
+        this.loader?.load('Init')
       }
     })
   }
@@ -44,7 +42,7 @@ export struct GridRefreshView {
       lazyDataSource: this.source?.getDataSource(),
       controller: this.controller,
       enableRefresh: this.model.init,
-      enableLoadMore: false,
+      enableLoadMore: this.model.more,
       autoShowEmptyLayout: true,
       showErrorLayout: this.model.type === 'Init' && this.model.state === 'Fail',
       showLoadingLayout: this.model.type === 'Init' && this.model.state === 'Loading',
@@ -55,30 +53,14 @@ export struct GridRefreshView {
       },
       gridAttribute: this.gridAttribute,
       itemLayout: this.itemLayout,
-      onRefresh: () => this.loadData('Refresh')
+      onRefresh: () => this.loader?.load('Refresh'),
+      onLoadMore: () => this.loader?.load("More")
     })
       .width(CommonConstants.FULL_PERCENT)
   }
 
-  private loadData(type: LoadType = "Init") {
-    this.model.type = type
-    this.model.state = 'Loading'
-    this.source?.loadData(type)
-      .then(() => {
-        if (!this.model.init) {
-          this.model.init = true
-        }
-        this.model.state = 'Success'
-        this.controller.finishRefresh()
-      })
-      .catch((error: Error) => {
-        this.model.state = 'Fail'
-        this.controller.finishRefresh()
-      })
-  }
-
   aboutToDisappear(): void {
-    AppEventHub.off(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
+    this.loader?.clear()
   }
 
 }

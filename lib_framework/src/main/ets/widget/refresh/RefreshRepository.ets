@@ -12,6 +12,8 @@ export interface RefreshRepository {
 
   getDataSource(): RefreshDataSource
 
+  hasMore(): boolean
+
   loadData(type: LoadType): Promise<void>
 
 }

@@ -9,4 +9,6 @@ export class AppModel {
 
   init: boolean = false
 
+  more?: boolean
+
 }

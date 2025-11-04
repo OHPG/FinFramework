@@ -19,6 +19,10 @@ export abstract class ListViewModel extends FinViewModel<FinRepository> implemen
     return this.dataSource
   }
 
+  hasMore(): boolean {
+    return false
+  }
+
   abstract loadData(type: LoadType): Promise<void>
 
 }
