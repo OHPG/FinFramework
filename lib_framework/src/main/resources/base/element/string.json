@@ -1,10 +1,6 @@
 {
   "string": [
     {
-      "name": "server_name",
-      "value": "名称"
-    },
-    {
       "name": "server_address",
       "value": "服务器地址"
     },
@@ -21,6 +17,10 @@
       "value": "密码"
     },
     {
+      "name": "server_alias",
+      "value": "别名"
+    },
+    {
       "name": "login_auth",
       "value": "登录"
     },
@@ -29,8 +29,8 @@
       "value": "*仅支持%s协议*"
     },
     {
-      "name": "error_name_empty",
-      "value": "名称不能为空"
+      "name": "error_alias_empty",
+      "value": "别名不能为空"
     },
     {
       "name": "error_url_empty",

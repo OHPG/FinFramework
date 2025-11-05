@@ -1,10 +1,4 @@
 export interface FinAuthResult {
-  /**
-   *
-   * @type {string}
-   * @memberof AuthenticationResult
-   */
-  'ServerId'?: string | null;
 
   /**
    * Gets or sets the name.

@@ -225,14 +225,14 @@ export abstract class CoreRepository {
    * @param psw
    * @returns
    */
-  public async authAccount(type: ServerType, name: string, url: string, userName: string, userPsw?: string): Promise<void> {
+  public async authAccount(type: ServerType, url: string, userName: string, userPsw?: string, alias?: string): Promise<void> {
     if (this.authApi?.getApiType() !== type) {
       this.authApi?.release()
       this.authApi = undefined
       this.authApi = this.apiFactory.createApi(type)
     }
     this.authApi.updateAddress(url)
-    let systemInfo = await this.authApi.getPublicSystemInfo(url, name)
+    let systemInfo = await this.authApi.getPublicSystemInfo(url, alias)
     if (!systemInfo.StartupWizardCompleted) {
       throw new Error("Server startup wizard not complete.")
     }
@@ -261,12 +261,12 @@ export abstract class CoreRepository {
     }
 
     // auth
-    let authResult = await this.authApi.authenticateUserByName(userName, userPsw)
+    let authResult = await this.authApi.auth(userName, userPsw, url)
 
     let userInfo: UserInfo = {
       userId: authResult.UserId!,
       userName: authResult.UserName!,
-      serverId: authResult.ServerId!,
+      serverId: systemInfo.Id!,
       accessToken: authResult.AccessToken!
     }
 
@@ -282,11 +282,15 @@ export abstract class CoreRepository {
    * @returns
    */
   public async addAccount(name: string, psw?: string): Promise<void> {
-    let authResult = await this.requireApi().authenticateUserByName(name, psw)
+    let serverId = this.activeInfo?.serverInfo.serverId
+    if (!serverId) {
+      throw new Error("No active server info.")
+    }
+    let authResult = await this.requireApi().auth(name, psw)
     let userInfo: UserInfo = {
       userId: authResult.UserId!,
       userName: authResult.UserName!,
-      serverId: authResult.ServerId!,
+      serverId: serverId,
       accessToken: authResult.AccessToken!
     }
     await this.dataStore.insertUser(userInfo)

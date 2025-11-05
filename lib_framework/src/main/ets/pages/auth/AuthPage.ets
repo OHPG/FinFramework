@@ -23,13 +23,13 @@ struct AuthPage {
 
   private appName?: string
 
-  private name?: string
-
   private url?: string
 
   private userName?: string
 
   private psw?: string
+
+  private alias?: string
 
   private progressDialog?: ProgressDialog
 
@@ -57,7 +57,7 @@ struct AuthPage {
 
       RelativeContainer() {
 
-        TextInput({ placeholder: $r('app.string.login_user_name') })
+        TextInput({ text: $$this.userName, placeholder: $r('app.string.login_user_name') })
           .id("user_name")
           .constraintSize({
             maxWidth: 300
@@ -66,11 +66,8 @@ struct AuthPage {
             middle: { anchor: "__container__", align: HorizontalAlign.Center },
             top: { anchor: "__container__", align: VerticalAlign.Center },
           })
-          .onChange((value) => {
-            this.userName = value
-          })
 
-        TextInput({ placeholder: $r('app.string.login_psw') })
+        TextInput({ text: $$this.psw, placeholder: $r('app.string.login_psw') })
           .id("user_psw")
           .type(InputType.Password)
           .constraintSize({
@@ -83,27 +80,21 @@ struct AuthPage {
             middle: { anchor: "__container__", align: HorizontalAlign.Center },
             top: { anchor: "user_name", align: VerticalAlign.Bottom },
           })
-          .onChange((value) => {
-            this.psw = value
-          })
 
-        TextInput({ placeholder: $r('app.string.server_name') })
-          .id("server_name")
+        TextInput({ text: $$this.alias, placeholder: $r('app.string.server_alias') })
+          .id("server_alias")
           .constraintSize({
             maxWidth: 300
           })
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
-            bottom: { anchor: "server_address", align: VerticalAlign.Top}
+            top: { anchor: "user_psw", align: VerticalAlign.Bottom}
           })
           .margin({
-            bottom: 15
-          })
-          .onChange((value) => {
-            this.name = value
+            top: 15
           })
 
-        TextInput({ placeholder: $r('app.string.server_address') })
+        TextInput({ text: $$this.url, placeholder: $r('app.string.server_address') })
           .id("server_address")
           .type(InputType.URL)
           .constraintSize({
@@ -116,9 +107,6 @@ struct AuthPage {
           .margin({
             bottom: 15
           })
-          .onChange((value) => {
-            this.url = value
-          })
 
         Image(this.appIcon)
           .width(120)
@@ -126,9 +114,8 @@ struct AuthPage {
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
             top: { anchor: "__container__", align: VerticalAlign.Top},
-            bottom: { anchor: "server_name", align: VerticalAlign.Top}
+            bottom: { anchor: "server_address", align: VerticalAlign.Top}
           })
-
 
         Button($r('app.string.login_auth'))
           .id("server_connect")
@@ -142,7 +129,7 @@ struct AuthPage {
           })
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
-            top: { anchor: "user_psw", align: VerticalAlign.Bottom}
+            top: { anchor: "server_alias", align: VerticalAlign.Bottom}
           })
           .onClick(() => {
             this.onAuth()
@@ -164,12 +151,6 @@ struct AuthPage {
   }
 
   private async onAuth() {
-    let name = this.name?.trim()
-    if (!name || name.length <= 0) {
-      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_name_empty')})
-      return
-    }
-
     let url = this.url?.trim()
     if (!url || url.length <= 0) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_url_empty')})
@@ -191,13 +172,21 @@ struct AuthPage {
     }
 
     let userPsw = this.psw?.trim()
-    if (!userPsw || userPsw.length <= 0) {
+    let forceCheckPsw = this.param.type === ServerType.KOMGA
+    if (forceCheckPsw && (!userPsw || userPsw.length <= 0)) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_psw_empty')})
       return
     }
 
+    let alias = this.alias?.trim()
+    let forceCheckAlias = this.param.type === ServerType.KOMGA
+    if (forceCheckAlias && (!alias || alias.length <= 0)) {
+      this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_alias_empty')})
+      return
+    }
+
     await this.progressDialog?.show()
-    this.repository?.authAccount(this.param.type, url, userName, userPsw, name)
+    this.repository?.authAccount(this.param.type, url, userName, userPsw, alias)
       .then(() => {
         this.progressDialog?.dismiss()
         let state = this.getUIContext().getRouter().getStateByIndex(0)

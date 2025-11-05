@@ -48,9 +48,10 @@ export interface CoreApi {
    * 认证用户
    * @param name 用户名
    * @param psw 密码
+   * @param url 地址
    * @returns 认证结果
    */
-  authenticateUserByName(name: string, psw?: string): Promise<FinAuthResult>
+  auth(name: string, psw?: string, url?: string): Promise<FinAuthResult>
 
   /**
    * 收藏媒体文件
