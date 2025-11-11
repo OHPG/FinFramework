@@ -5,7 +5,7 @@ import { util } from "@kit.ArkTS";
  * @Email peerless2012@126.com
  * @DateTime 2025/9/28 11:54
  * @Version V1.0
- * @Description: 
+ * @Description:
  */
 export class LruCache<K, V> {
 
@@ -16,8 +16,24 @@ export class LruCache<K, V> {
   protected maxSize: number = 0;
 
   public constructor(maxSize: number = 128 * 1024 * 1024) {
-    this.lruCache = new util.LRUCache(maxSize / 1024);
+    this.lruCache = new util.LRUCache(1024);
     this.maxSize = maxSize;
+  }
+
+  /**
+   * 获取最大缓存大小
+   * @returns
+   */
+  public getMaxSize(): number {
+    return this.maxSize
+  }
+
+  /**
+   * 获取当前缓存大小
+   * @returns
+   */
+  public getCurrentSize(): number {
+    return this.curSize
   }
 
   /**
@@ -78,8 +94,8 @@ export class LruCache<K, V> {
   public remove(key: K): V | undefined {
     const value = this.lruCache.remove(key);
     if (value) {
-      this.entryRemoved(false, key, value, undefined)
       this.curSize -= this.sizeOf(key, value);
+      this.entryRemoved(false, key, value, undefined)
     }
     return value
   }
@@ -94,8 +110,8 @@ export class LruCache<K, V> {
     for (const key of keys) {
       let value = this.lruCache.remove(key)
       if (value) {
-        this.entryRemoved(true, key, value, undefined)
         this.curSize -= this.sizeOf(key, value)
+        this.entryRemoved(true, key, value, undefined)
       }
       if (this.curSize <= size) {
         break
@@ -107,7 +123,9 @@ export class LruCache<K, V> {
    * 清空缓存
    */
   public clear(): void {
-    this.lruCache.clear();
+    this.trimToSize(0)
+    this.lruCache.clear()
     this.curSize = 0;
   }
+
 }
