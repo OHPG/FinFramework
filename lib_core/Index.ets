@@ -17,8 +17,10 @@ export { CoreApi } from './src/main/ets/api/CoreApi'
 export { ApiFactory } from './src/main/ets/api/ApiFactory'
 
 // cache
+export { CacheRef } from './src/main/ets/cache/CacheRef'
+export { ImageRef } from './src/main/ets/cache/ImageRef'
 export { LruCache } from './src/main/ets/cache/LruCache'
-export { ImageLruCache } from './src/main/ets/cache/ImageLruCache'
+export { RefLruCache } from './src/main/ets/cache/RefLruCache'
 
 // data
 export { CoreRepository } from './src/main/ets/data/CoreRepository'
