@@ -1,3 +1,4 @@
+import { FinCollectionType } from "./FinCollectionType"
 import { FinImage } from "./FinImage"
 import { FinItemData } from "./FinItemData"
 import { FinItemType } from "./FinItemType"
@@ -23,9 +24,9 @@ export interface FinItem {
 
   overview?: string
 
-  played?: boolean
+  seriesName?: string
 
-  favorite?: boolean
+  seasonId?: string
 
   canPlay?: boolean
 
@@ -49,7 +50,15 @@ export interface FinItem {
 
   image?: FinImage
 
+  genres?: Array<string>;
+
   person?: Array<FinPerson>
 
   data?: FinItemData
+
+  parentIndex?: number
+
+  index?: number
+
+  collectionType?: FinCollectionType
 }
