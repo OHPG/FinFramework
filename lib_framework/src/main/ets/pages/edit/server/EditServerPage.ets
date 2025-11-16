@@ -1,4 +1,4 @@
-import { ServerInfo, ServerType } from '@ohpg/fin-core'
+import { ServerInfo } from '@ohpg/fin-core'
 import { ToolBar } from '../../../widget/bar/ToolBar'
 import { ListRefreshView } from '../../../widget/refresh/ListRefreshView'
 import { CommonConstants } from '../../../common/CommonConstants'
@@ -59,7 +59,7 @@ struct EditServerPage {
   }
 
   private onAddServer() {
-    FinRouter.auth(this.getUIContext(), ServerType.KOMGA)
+    FinRouter.auth(this.getUIContext())
   }
 }
 

@@ -1,5 +1,3 @@
-import { ServerType } from "@ohpg/fin-core";
-import { AuthParam } from "./auth/AuthParam";
 import { FinPages } from "./FinPages";
 
 /**
@@ -15,16 +13,13 @@ export class FinRouter {
    * Add server
    * @returns
    */
-  public static async auth(context: UIContext, type: ServerType, replace?: boolean): Promise<void> {
+  public static async auth(context: UIContext, replace?: boolean): Promise<void> {
     await import ("./auth/AuthPage")
     let router = context.getRouter()
-    let param: AuthParam = {
-      type: type
-    }
     if (replace) {
-      await router.replaceNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER, params: param})
+      await router.replaceNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER})
     } else {
-      await router.pushNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER, params: param})
+      await router.pushNamedRoute({name: FinPages.PAGE_FIN_ADD_SERVER})
     }
   }
 

@@ -3,7 +3,6 @@ import { FinPages } from '../FinPages'
 import { ProgressDialog } from '../../dialog/ProgressDialog'
 import { bundleManager, common } from '@kit.AbilityKit'
 import { ToolBar } from '../../widget/bar/ToolBar'
-import { AuthParam } from './AuthParam'
 
 /**
  * @Author peerless2012
@@ -16,8 +15,6 @@ import { AuthParam } from './AuthParam'
 @Entry({routeName: FinPages.PAGE_FIN_ADD_SERVER})
 @Component
 struct AuthPage {
-
-  private param: AuthParam = this.getUIContext().getRouter().getParams() as AuthParam
 
   private appIcon?: DrawableDescriptor
 
@@ -36,6 +33,8 @@ struct AuthPage {
   private repository: CoreRepository = AppStorage.get(CoreRepository.REPOSITORY)!
 
   private canBack: boolean = true
+
+  private serverType: ServerType = this.repository.getSupportServer()
 
   aboutToAppear(): void {
     let bundleInfo = bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
@@ -135,7 +134,7 @@ struct AuthPage {
             this.onAuth()
           })
 
-        Text($r('app.string.login_auth_tips', this.param.type))
+        Text($r('app.string.login_auth_tips', this.serverType))
           .fontSize($r('sys.float.ohos_id_text_size_sub_title3'))
           .fontColor($r('sys.color.font_secondary'))
           .margin(36)
@@ -172,21 +171,21 @@ struct AuthPage {
     }
 
     let userPsw = this.psw?.trim()
-    let forceCheckPsw = this.param.type === ServerType.KOMGA
+    let forceCheckPsw = this.serverType === ServerType.KOMGA
     if (forceCheckPsw && (!userPsw || userPsw.length <= 0)) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_user_psw_empty')})
       return
     }
 
     let alias = this.alias?.trim()
-    let forceCheckAlias = this.param.type === ServerType.KOMGA
+    let forceCheckAlias = this.serverType === ServerType.KOMGA
     if (forceCheckAlias && (!alias || alias.length <= 0)) {
       this.getUIContext().getPromptAction().showToast({message: $r('app.string.error_alias_empty')})
       return
     }
 
     await this.progressDialog?.show()
-    this.repository?.authAccount(this.param.type, url, userName, userPsw, alias)
+    this.repository?.authAccount(this.serverType, url, userName, userPsw, alias)
       .then(() => {
         this.progressDialog?.dismiss()
         let state = this.getUIContext().getRouter().getStateByIndex(0)

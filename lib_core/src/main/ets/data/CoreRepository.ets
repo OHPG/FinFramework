@@ -58,6 +58,12 @@ export abstract class CoreRepository {
     this.dataStore = new DataStore(context)
   }
 
+  /**
+   * 获取支持的服务类型
+   * @returns
+   */
+  public abstract getSupportServer(): ServerType
+
   protected requireApi(): CoreApi {
     return this.finApi!
   }

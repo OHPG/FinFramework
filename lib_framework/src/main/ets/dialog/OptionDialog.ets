@@ -87,7 +87,7 @@ function OptionDialogBuilder(option: Options) {
       .height('auto')
       .width('100%')
       .constraintSize({
-        maxHeight: '75%'
+        maxHeight: '80%'
       })
     }
     .backgroundColor($r('sys.color.ohos_id_color_dialog_bg'))
@@ -95,10 +95,11 @@ function OptionDialogBuilder(option: Options) {
       radius: CommonConstants.SPACE_16
     })
     .padding(CommonConstants.SPACE_16)
-    .width(320)
+    .width(360)
     .height('auto')
     .constraintSize({
-      maxWidth: '60%'
+      minWidth: 300,
+      maxWidth: '80%'
     })
     // just block click event.
     .onClick(() => {})
