@@ -6,8 +6,8 @@
   "author": "peerless2012",
   "license": "Apache-2.0",
   "dependencies": {
-    "@ohpg/network": "file:../../FinSdk/network",
-    "@ohpg/jellyfin": "file:../../FinSdk/jellyfin",
-    "@ohpg/emby": "file:../../FinSdk/emby",
+    "@ohpg/network": "file:../../sdk/network",
+    "@ohpg/jellyfin": "file:../../sdk/jellyfin",
+    "@ohpg/emby": "file:../../sdk/emby",
   }
 }
