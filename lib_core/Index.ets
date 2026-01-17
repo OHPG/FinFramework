@@ -40,7 +40,9 @@ export { FinStreamType } from './src/main/ets/entity/item/FinStreamType'
 export { FinVideoRangeType } from './src/main/ets/entity/item/FinVideoRangeType'
 export { FinImage } from './src/main/ets/entity/item/FinImage'
 export { FinPage } from './src/main/ets/entity/item/FinPage'
-
+export { FinSortBy } from './src/main/ets/entity/item/FinSortBy'
+export { FinSortOrder } from './src/main/ets/entity/item/FinSortOrder'
+export { FinPageSize } from './src/main/ets/entity/item/FinPageSize'
 
 // lifecycle
 export { ViewModel } from './src/main/ets/lifecycle/vm/ViewModel'

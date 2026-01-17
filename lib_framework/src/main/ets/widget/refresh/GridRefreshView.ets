@@ -1,4 +1,4 @@
-import { AppModel } from "@ohpg/fin-core"
+import { AppEvents, AppModel } from "@ohpg/fin-core"
 import { GridAttr, GridView, RefreshController } from '@abner/refresh';
 import { CommonConstants } from "../../common/CommonConstants"
 import { emptyStateViewBuilder } from "../state/EmptyStateView"
@@ -23,7 +23,12 @@ export struct GridRefreshView {
 
   private loader?: LoadHelper
 
+  private loadCallback: Callback<void> = () => {
+    this.loader?.load('Refresh')
+  }
+
   aboutToAppear(): void {
+    this.getUIContext().getHostContext()?.eventHub.on(AppEvents.EVENT_SORT_INFO_CHANGED, this.loadCallback)
     this.loader= new LoadHelper(this.model, this.source!, this.controller)
     this.loader.load()
   }
@@ -61,6 +66,7 @@ export struct GridRefreshView {
 
   aboutToDisappear(): void {
     this.loader?.clear()
+    this.getUIContext().getHostContext()?.eventHub.off(AppEvents.EVENT_SORT_INFO_CHANGED, this.loadCallback)
   }
 
 }
