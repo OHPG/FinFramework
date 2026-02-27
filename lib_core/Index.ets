@@ -56,6 +56,9 @@ export { TimeTool } from './src/main/ets/tool/TimeTool'
 export { WebTool } from './src/main/ets/tool/WebTool'
 export { StringTool } from './src/main/ets/tool/StringTool'
 
+// util
+export { MarketUtil } from './src/main/ets/util/MarketUtil'
+
 // system
 export { AvoidAreaSystem } from './src/main/ets/system/AvoidAreaSystem'
 export { BreakpointSystem, BreakpointType, BreakpointTypes } from './src/main/ets/system/BreakpointSystem'
