@@ -34,6 +34,7 @@ export abstract class Sheet {
     dragBar: true,
     maskColor: $r('sys.color.mask_secondary'),
     showClose: false,
+    mode: SheetMode.EMBEDDED,
     blurStyle: BlurStyle.BACKGROUND_THICK,
     preferType: SheetType.BOTTOM,
     onWillAppear: () => {
@@ -49,7 +50,7 @@ export abstract class Sheet {
       }
     },
     onWillDisappear: () => {
-
+      this.onWillDisappear()
     },
     onDisappear: () => {
       this.onDidDisappear()
@@ -148,6 +149,10 @@ export abstract class Sheet {
    */
   protected onWillDismiss(reason: DismissReason): boolean {
     return !this.cancelable
+  }
+
+  protected onWillDisappear() {
+
   }
 
   /**
