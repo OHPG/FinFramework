@@ -36,7 +36,7 @@ function ProgressDialogBuilder() {
   }
   .hitTestBehavior(HitTestMode.Block)
   .justifyContent(FlexAlign.Center)
-  .backgroundColor($r('sys.color.comp_background_secondary'))
+  .backdropBlur(50, { grayscale: [20, 50] })
   .width('100%')
   .height('100%')
 

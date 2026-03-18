@@ -106,6 +106,7 @@ function OptionDialogBuilder(option: Options) {
   }
   .width('100%')
   .height('100%')
+  .backdropBlur(50, { grayscale: [20, 50] })
   .onClick(() => {
     option.dialog?.dismiss(true)
   })

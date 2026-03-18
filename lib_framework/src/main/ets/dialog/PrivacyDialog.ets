@@ -42,7 +42,12 @@ export interface PrivacyOptions {
 
 @Builder
 function PrivacyDialogBuilder(options: PrivacyOptions) {
-  PrivacyView({
-    options: options
-  })
+  Stack() {
+    PrivacyView({
+      options: options
+    })
+  }
+    .backdropBlur(50, { grayscale: [20, 50] })
+    .width('100%')
+    .height('100%')
 }
