@@ -38,8 +38,6 @@ export interface FinItem {
 
   runtimeTicks?: number
 
-  playbackPositionTicks?: number
-
   unplayedItemCount?: number
 
   productionYear?: string
