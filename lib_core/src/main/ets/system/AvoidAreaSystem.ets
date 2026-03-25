@@ -82,7 +82,7 @@ export class AvoidAreaSystem {
 
   private compareAreaRect(left: window.Rect, right: window.Rect) {
     left.left = Math.min(left.left, right.left)
-    left.top = Math.min(left.left, right.left)
+    left.top = Math.min(left.top, right.top)
     left.width = Math.max(left.width, right.width)
     left.height = Math.max(left.height, right.height)
   }
