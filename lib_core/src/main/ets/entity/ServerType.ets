@@ -20,6 +20,11 @@ export enum ServerType {
   /**
    * Komga server
    */
-  KOMGA = "Komga"
+  KOMGA = "Komga",
+
+  /**
+   * Plex server
+   */
+  PLEX = "Plex"
 
 }
