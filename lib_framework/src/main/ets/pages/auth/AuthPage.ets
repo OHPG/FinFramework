@@ -34,7 +34,11 @@ struct AuthPage {
 
   private canBack: boolean = true
 
-  private serverType: ServerType = this.repository.getSupportServer()
+  @State private serverType: ServerType = ServerType.JELLYFIN
+
+  private supportServer?: Array<ServerType>
+
+  private serverOptions: SelectOption[] = []
 
   aboutToAppear(): void {
     let bundleInfo = bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
@@ -43,6 +47,13 @@ struct AuthPage {
     this.appName = resourceManager.getStringSync(bundleInfo.appInfo.labelResource)
     this.progressDialog = new ProgressDialog(this.getUIContext())
     this.canBack = Number.parseInt(this.getUIContext().getRouter().getLength()) > 1
+    this.supportServer = this.repository.getSupportServer()
+    for(const type of this.supportServer) {
+      this.serverOptions.push({
+       value: type
+      })
+    }
+    this.serverType = this.supportServer[0]
   }
 
   build() {
@@ -93,6 +104,27 @@ struct AuthPage {
             top: 15
           })
 
+        if (this.serverOptions && this.serverOptions.length > 1) {
+          Select(this.serverOptions)
+            .id("server_type")
+            .selected(0)
+            .value(this.serverType)
+            .constraintSize({
+              maxWidth: 300
+            })
+            .width('100%')
+            .alignRules({
+              middle: { anchor: "__container__", align: HorizontalAlign.Center },
+              bottom: { anchor: "server_address", align: VerticalAlign.Top }
+            })
+            .margin({
+              bottom: 15
+            })
+            .onSelect((index: number) => {
+              this.serverType = this.supportServer![index]
+            })
+        }
+
         TextInput({ text: $$this.url, placeholder: $r('app.string.server_address') })
           .id("server_address")
           .type(InputType.URL)
@@ -113,7 +145,7 @@ struct AuthPage {
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
             top: { anchor: "__container__", align: VerticalAlign.Top},
-            bottom: { anchor: "server_address", align: VerticalAlign.Top}
+            bottom: { anchor: "server_type", align: VerticalAlign.Top}
           })
 
         Button($r('app.string.login_auth'))
@@ -134,7 +166,7 @@ struct AuthPage {
             this.onAuth()
           })
 
-        Text($r('app.string.login_auth_tips', this.serverType))
+        Text($r('app.string.login_auth_tips', this.supportServer?.join(",")))
           .fontSize($r('sys.float.ohos_id_text_size_sub_title3'))
           .fontColor($r('sys.color.font_secondary'))
           .margin(36)

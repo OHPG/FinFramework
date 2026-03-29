@@ -62,7 +62,7 @@ export abstract class CoreRepository {
    * 获取支持的服务类型
    * @returns
    */
-  public abstract getSupportServer(): ServerType
+  public abstract getSupportServer(): Array<ServerType>
 
   protected requireApi(): CoreApi {
     return this.finApi!

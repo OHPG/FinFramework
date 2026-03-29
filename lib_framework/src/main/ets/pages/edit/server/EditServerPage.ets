@@ -98,19 +98,28 @@ struct ServerItem {
 
     Row({space: CommonConstants.SPACE_12}) {
       SymbolGlyph($r('sys.symbol.externaldrive'))
-        .fontSize(24)
+        .fontSize(32)
         .fontColor([$r('sys.color.ohos_id_color_text_primary')])
-      Text(this.item?.serverName)
-        .fontSize(18)
-        .fontColor($r('sys.color.ohos_id_color_text_primary'))
-      Blank()
+      Column({space: CommonConstants.SPACE_4}) {
+        Text(this.item?.serverType)
+          .fontSize(18)
+          .textAlign(TextAlign.Start)
+          .width(CommonConstants.FULL_PERCENT)
+          .fontColor($r('sys.color.ohos_id_color_text_primary'))
+        Text(this.item?.serverName)
+          .fontSize(14)
+          .textAlign(TextAlign.Start)
+          .width(CommonConstants.FULL_PERCENT)
+          .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+      }
+      .layoutWeight(1)
       Toggle({type: ToggleType.Checkbox, isOn: this.activeServerId === this.item?.serverId})
         .hitTestBehavior(HitTestMode.None)
     }
     .enabled(this.activeServerId !== this.item?.serverId)
     .bindContextMenu(this.menuBuilder, ResponseType.LongPress)
     .width(CommonConstants.FULL_PERCENT)
-    .height(48)
+    .height(60)
     .padding({
       left: CommonConstants.SPACE_16,
       right: CommonConstants.SPACE_16
