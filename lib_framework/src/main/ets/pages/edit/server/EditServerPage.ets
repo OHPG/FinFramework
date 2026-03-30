@@ -1,4 +1,4 @@
-import { ServerInfo } from '@ohpg/fin-core'
+import { ServerInfo, ServerType } from '@ohpg/fin-core'
 import { ToolBar } from '../../../widget/bar/ToolBar'
 import { ListRefreshView } from '../../../widget/refresh/ListRefreshView'
 import { CommonConstants } from '../../../common/CommonConstants'
@@ -70,6 +70,8 @@ struct ServerItem {
 
   @Require @State item?: ServerInfo = undefined
 
+  @State itemIcon?: Resource = undefined
+
   @StorageLink("Repository") repository?: FinRepository = undefined
 
   @Consume activeServerId?: string
@@ -90,16 +92,38 @@ struct ServerItem {
     }
   }
 
+  private updateServerIcon() {
+    switch (this.item?.serverType) {
+      case ServerType.EMBY:
+        this.itemIcon = $r('app.media.emby')
+        break
+      case ServerType.JELLYFIN:
+        this.itemIcon = $r('app.media.jellyfin')
+        break
+      case ServerType.PLEX:
+        this.itemIcon = $r('app.media.plex')
+        break
+      case ServerType.KOMGA:
+        this.itemIcon = $r('app.media.komga')
+        break
+    }
+  }
+
+  aboutToAppear(): void {
+    this.updateServerIcon()
+  }
+
   aboutToReuse(params: Record<string, object>): void {
     this.item = params['item'] as ServerInfo
+    this.updateServerIcon()
   }
 
   build() {
 
     Row({space: CommonConstants.SPACE_12}) {
-      SymbolGlyph($r('sys.symbol.externaldrive'))
-        .fontSize(32)
-        .fontColor([$r('sys.color.ohos_id_color_text_primary')])
+      Image(this.itemIcon)
+        .width(32)
+        .height(32)
       Column({space: CommonConstants.SPACE_4}) {
         Text(this.item?.serverType)
           .fontSize(18)
