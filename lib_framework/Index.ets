@@ -13,6 +13,8 @@ export { DeviceUtil } from './src/main/ets/util/DeviceUtil'
 
 // model
 export { FinViewModel } from './src/main/ets/model/FinViewModel'
+export { default as LazyDataSource } from './src/main/ets/model/LazyDataSource'
+export { ObservedArray } from './src/main/ets/model/ObservedArray'
 
 // dialog
 export { Dialog } from './src/main/ets/dialog/Dialog'
