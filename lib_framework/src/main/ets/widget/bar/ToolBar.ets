@@ -4,7 +4,7 @@ import { CommonConstants } from "../../common/CommonConstants";
 @Component
 export struct ToolBar {
 
-  @Prop title: ResourceStr
+  @Prop title?: ResourceStr
 
   @Prop color: ResourceColor = $r('sys.color.font_primary')
 
@@ -37,6 +37,7 @@ export struct ToolBar {
           .fontColor(this.color)
           .fontWeight(FontWeight.Bold)
           .fontFamily(CommonConstants.HARMONY_HEITI_BOLD_FONT_FAMILY)
+          .visibility(this.title ? Visibility.Visible : Visibility.None)
           .maxLines(1)
           .layoutWeight(1)
           .onClick(() => {
