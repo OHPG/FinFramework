@@ -27,9 +27,9 @@ export { Sheet } from './src/main/ets/sheet/Sheet'
 
 // widget
 export { ToolBar } from './src/main/ets/widget/bar/ToolBar'
-export { EmptyStateView, emptyStateViewBuilder } from './src/main/ets/widget/state/EmptyStateView'
-export { ErrorStateView, errorStateBuilder } from './src/main/ets/widget/state/ErrorStateView'
-export { LoadStateView, loadStateBuilder } from './src/main/ets/widget/state/LoadStateView'
+export { LoadingStateView } from './src/main/ets/widget/state/LoadingStateView'
+export { EmptyStateView } from './src/main/ets/widget/state/EmptyStateView'
+export { ErrorStateView } from './src/main/ets/widget/state/ErrorStateView'
 export { GridRefreshView } from './src/main/ets/widget/refresh/GridRefreshView'
 export { ListRefreshView } from './src/main/ets/widget/refresh/ListRefreshView'
 export { RefreshRepository } from './src/main/ets/widget/refresh/RefreshRepository'

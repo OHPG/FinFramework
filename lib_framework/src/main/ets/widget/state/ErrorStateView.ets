@@ -1,33 +1,29 @@
-import { CommonConstants } from "../../common/CommonConstants"
+import { CommonConstants } from '../../common/CommonConstants'
 
 @Component
 export struct ErrorStateView {
-
-  callback?: Callback<void>
+  @Prop message: ResourceStr = ''
+  messageColor: ResourceColor = $r('sys.color.font_secondary')
+  onRetry?: Callback<void> = undefined
 
   build() {
-
-    Stack() {
-
-      Column({space: CommonConstants.SPACE_12}) {
-        Text("加载出错了")
-          .fontSize($r('sys.float.Title_S'))
-        Button("点击重试")
-          .onClick(() => {
-            this.callback?.()
-          })
-      }
-
+    Column({ space: CommonConstants.SPACE_12 }) {
+      Text('⚠️')
+        .fontSize(40)
+      Text(this.message)
+        .fontSize($r('sys.float.Body_M'))
+        .fontColor(this.messageColor)
+        .textAlign(TextAlign.Center)
+        .padding({ left: 40, right: 40 })
+      Button($r('app.string.state_retry'))
+        .onClick(() => {
+          this.onRetry?.()
+        })
+        .visibility(this.onRetry ? Visibility.Visible : Visibility.None)
     }
     .width(CommonConstants.FULL_PERCENT)
     .height(CommonConstants.FULL_PERCENT)
-
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
   }
-
-}
-
-@Builder
-export function errorStateBuilder(callback?: string) {
-  ErrorStateView({
-  })
 }

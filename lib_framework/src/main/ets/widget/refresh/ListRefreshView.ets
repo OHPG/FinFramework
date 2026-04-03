@@ -1,9 +1,9 @@
 import { AppModel } from "@ohpg/fin-core"
 import { ListAttr, ListView, RefreshController } from '@abner/refresh';
 import { CommonConstants } from "../../common/CommonConstants"
-import { emptyStateViewBuilder } from "../state/EmptyStateView"
+import { EmptyStateView } from "../state/EmptyStateView"
 import { ErrorStateView } from "../state/ErrorStateView"
-import { loadStateBuilder } from "../state/LoadStateView"
+import { LoadingStateView } from "../state/LoadingStateView"
 import { RefreshRepository } from "./RefreshRepository"
 import { LoadHelper } from "./LoadHelper";
 
@@ -31,10 +31,20 @@ export struct ListRefreshView {
   @Builder
   private errorStateBuilder() {
     ErrorStateView({
-      callback: () => {
+      onRetry: () => {
         this.loader?.load('Init')
       }
     })
+  }
+
+  @Builder
+  private loadingStateBuilder() {
+    LoadingStateView()
+  }
+
+  @Builder
+  private emptyStateBuilder() {
+    EmptyStateView()
   }
 
   build() {
@@ -46,8 +56,8 @@ export struct ListRefreshView {
       autoShowEmptyLayout: true,
       showErrorLayout: this.model.type === 'Init' && this.model.state === 'Fail',
       showLoadingLayout: this.model.type === 'Init' && this.model.state === 'Loading',
-      loadingLayout: loadStateBuilder,
-      emptyLayout: emptyStateViewBuilder,
+      loadingLayout: this.loadingStateBuilder,
+      emptyLayout: this.emptyStateBuilder,
       errorLayout: () => {
         this.errorStateBuilder()
       },

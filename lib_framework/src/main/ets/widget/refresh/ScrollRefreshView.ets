@@ -1,9 +1,9 @@
 import { AppEventHub, AppEvents, AppModel } from "@ohpg/fin-core";
 import { LoadType } from "@ohpg/fin-core";
 import { RefreshController, RefreshLayout } from "@abner/refresh"
-import { emptyStateViewBuilder } from "../state/EmptyStateView";
+import { EmptyStateView } from "../state/EmptyStateView";
 import { ErrorStateView } from "../state/ErrorStateView";
-import { loadStateBuilder } from "../state/LoadStateView";
+import { LoadingStateView } from "../state/LoadingStateView";
 import { SimpleRepository } from "./SimpleRepository";
 
 @Component
@@ -34,10 +34,20 @@ export struct ScrollRefreshView {
   @Builder
   private errorStateBuilder() {
     ErrorStateView({
-      callback: () => {
+      onRetry: () => {
         this.loadData()
       }
     })
+  }
+
+  @Builder
+  private loadingStateBuilder() {
+    LoadingStateView()
+  }
+
+  @Builder
+  private emptyStateBuilder() {
+    EmptyStateView()
   }
 
   @Builder
@@ -53,8 +63,8 @@ export struct ScrollRefreshView {
       enableLoadMore: false,
       showErrorLayout: this.model.type === 'Init' && this.model.state === 'Fail',
       showLoadingLayout: this.model.type === 'Init' && this.model.state === 'Loading',
-      loadingLayout: loadStateBuilder,
-      emptyLayout: emptyStateViewBuilder,
+      loadingLayout: this.loadingStateBuilder,
+      emptyLayout: this.emptyStateBuilder,
       errorLayout: () => {
         this.errorStateBuilder()
       },

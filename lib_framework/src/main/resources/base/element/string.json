@@ -99,6 +99,10 @@
     {
       "name": "user_delete_success",
       "value": "用户已删除"
+    },
+    {
+      "name": "state_retry",
+      "value": "点击重试"
     }
   ]
 }
