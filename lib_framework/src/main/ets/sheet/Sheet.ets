@@ -43,17 +43,12 @@ export abstract class Sheet {
     onAppear: () => {
       this.onDidAppear()
     },
-    onWillDismiss: (action: DismissDialogAction) => {
-      if (!this.onWillDismiss(action.reason)) {
-        action.dismiss()
-        this.showing = false
-      }
-    },
     onWillDisappear: () => {
       this.onWillDisappear()
     },
     onDisappear: () => {
       this.onDidDisappear()
+      this.showing = false
       this.uiNode?.dispose()
       // https://developer.huawei.com/consumer/cn/doc/harmonyos-references-V5/errorcode-promptaction-V5#section103301-自定义弹窗内容节点错误
       this.uiNode = undefined
@@ -70,6 +65,23 @@ export abstract class Sheet {
    */
   public setCancelable(cancelable: boolean) {
     this.cancelable = cancelable
+    this.updateWillDismiss()
+  }
+
+  /**
+   * 仅在不可取消时拦截关闭手势，可取消时不设置 onWillDismiss 让系统自然处理动画
+   */
+  private updateWillDismiss(): void {
+    if (this.cancelable) {
+      this.options.onWillDismiss = undefined
+    } else {
+      this.options.onWillDismiss = (action: DismissDialogAction) => {
+        if (!this.onWillDismiss(action.reason)) {
+          action.dismiss()
+          this.showing = false
+        }
+      }
+    }
   }
 
   /**
