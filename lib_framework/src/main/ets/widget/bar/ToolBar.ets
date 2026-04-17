@@ -40,9 +40,6 @@ export struct ToolBar {
           .visibility(this.title ? Visibility.Visible : Visibility.None)
           .maxLines(1)
           .layoutWeight(1)
-          .onClick(() => {
-            this.getUIContext().getRouter().back()
-          })
 
           // 自定义菜单
           this.closer()
