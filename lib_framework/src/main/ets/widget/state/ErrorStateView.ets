@@ -8,8 +8,9 @@ export struct ErrorStateView {
 
   build() {
     Column({ space: CommonConstants.SPACE_12 }) {
-      Text('⚠️')
-        .fontSize(40)
+      SymbolGlyph($r('sys.symbol.exclamationmark_triangle_fill'))
+        .fontSize(48)
+        .fontColor([$r('sys.color.font_tertiary')])
       Text(this.message)
         .fontSize($r('sys.float.Body_M'))
         .fontColor(this.messageColor)

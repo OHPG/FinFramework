@@ -2,7 +2,7 @@ import { CommonConstants } from '../../common/CommonConstants'
 
 @Component
 export struct EmptyStateView {
-  @Prop icon: string = '📂'
+  @Prop icon: Resource = $r('sys.symbol.folder_fill')
   @Prop title: ResourceStr = ''
   @Prop subtitle: ResourceStr = ''
   titleColor: ResourceColor = $r('sys.color.font_secondary')
@@ -10,8 +10,9 @@ export struct EmptyStateView {
 
   build() {
     Column({ space: CommonConstants.SPACE_12 }) {
-      Text(this.icon)
-        .fontSize(40)
+      SymbolGlyph(this.icon)
+        .fontSize(48)
+        .fontColor([$r('sys.color.font_tertiary')])
       Text(this.title)
         .fontSize($r('sys.float.Body_M'))
         .fontColor(this.titleColor)
