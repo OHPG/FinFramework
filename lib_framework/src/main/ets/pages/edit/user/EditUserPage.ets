@@ -16,6 +16,8 @@ struct EditUserPage {
 
   private viewModel = new EditUserViewModel(getContext())
 
+  private readonly promptAction = this.getUIContext().getPromptAction()
+
   @Provide activeUserId?: string = undefined
 
   @Builder
@@ -25,6 +27,18 @@ struct EditUserPage {
 
   aboutToAppear(): void {
     this.activeUserId = this.repository?.getActiveInfo()?.userInfo.userId
+  }
+
+  private onDeleteUser(item: Object, index: number): Promise<void> {
+    let userInfo = item as UserInfo
+    if (userInfo.userId === this.activeUserId) {
+      this.promptAction.showToast({message: $r('app.string.user_can_not_delete')})
+      return Promise.reject()
+    }
+    return this.repository!.deleteUser(userInfo)
+      .then(() => {
+        this.promptAction.showToast({message: $r('app.string.user_delete_success')})
+      })
   }
 
   build() {
@@ -44,6 +58,7 @@ struct EditUserPage {
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
+        onItemDelete: (item, index) => this.onDeleteUser(item, index),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,
@@ -80,20 +95,6 @@ struct UserItem {
 
   private readonly promptAction = this.getUIContext().getPromptAction()
 
-  @Builder
-  menuBuilder() {
-    // https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-popup-and-menu-components-menu
-    Menu() {
-      MenuItem({
-        startIcon: $r('sys.media.ohos_ic_public_remove'),
-        content: $r('app.string.menu_delete')
-      })
-        .onClick(() => {
-          this.deleteUser()
-        })
-    }
-  }
-
   aboutToReuse(params: Record<string, object>): void {
     this.item = params['item'] as UserInfo
   }
@@ -118,7 +119,6 @@ struct UserItem {
       left: CommonConstants.SPACE_16,
       right: CommonConstants.SPACE_16
     })
-    .bindContextMenu(this.menuBuilder, ResponseType.LongPress)
     .onClick(() => {
       this.selectUser()
     })
@@ -131,17 +131,6 @@ struct UserItem {
       .then(() => {
         this.activeUserId = this.item?.userId
         this.promptAction.showToast({message: $r('app.string.user_changed')})
-      })
-      .catch((error: Error) => {
-        this.promptAction.showToast({message: error.message})
-      })
-  }
-
-  private deleteUser() {
-    if (!this.item) return
-    this.repository?.deleteUser(this.item)
-      .then(() => {
-        this.promptAction.showToast({message: $r('app.string.user_delete_success')})
       })
       .catch((error: Error) => {
         this.promptAction.showToast({message: error.message})

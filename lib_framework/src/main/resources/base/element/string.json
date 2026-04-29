@@ -97,6 +97,14 @@
       "value": "当前用户无法删除"
     },
     {
+      "name": "server_can_not_delete",
+      "value": "当前服务器无法删除"
+    },
+    {
+      "name": "address_can_not_delete",
+      "value": "当前地址无法删除"
+    },
+    {
       "name": "user_delete_success",
       "value": "用户已删除"
     },

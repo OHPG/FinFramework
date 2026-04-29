@@ -7,6 +7,8 @@ import { LoadingStateView } from "../state/LoadingStateView"
 import { RefreshRepository } from "./RefreshRepository"
 import { LoadHelper } from "./LoadHelper";
 
+const DELETE_MENU_WIDTH = 72
+
 @Component
 export struct ListRefreshView {
 
@@ -18,6 +20,12 @@ export struct ListRefreshView {
   itemLayout?: (item: ESObject, index: number) => void;
 
   listAttribute?: (attribute: ListAttr) => void;
+
+  /**
+   * 条目删除回调，传入条目数据和索引，返回 Promise。
+   * 设置后自动启用横滑删除菜单。
+   */
+  onItemDelete?: (item: Object, index: number) => Promise<void>
 
   @State model: AppModel = new AppModel()
 
@@ -47,6 +55,32 @@ export struct ListRefreshView {
     EmptyStateView()
   }
 
+  @Builder
+  private deleteMenuBuilder(index: number) {
+    Row() {
+      SymbolGlyph($r('sys.symbol.trash'))
+        .fontColor([Color.White])
+        .fontSize(24)
+    }
+    .width(DELETE_MENU_WIDTH)
+    .height(CommonConstants.FULL_PERCENT)
+    .backgroundColor(Color.Red)
+    .justifyContent(FlexAlign.Center)
+    .onClick(() => {
+      this.handleDelete(index)
+    })
+  }
+
+  private handleDelete(index: number) {
+    let dataSource = this.source?.getDataSource()
+    if (!dataSource || !this.onItemDelete) return
+    let item = dataSource.getData(index)
+    this.onItemDelete(item, index)
+      .then(() => {
+        dataSource!.deleteData(index)
+      })
+  }
+
   build() {
     ListView({
       lazyDataSource: this.source?.getDataSource(),
@@ -63,6 +97,10 @@ export struct ListRefreshView {
       },
       itemLayout: this.itemLayout,
       listAttribute: this.listAttribute,
+      swipeRightMenuLayout: this.onItemDelete !== undefined
+        ? (index: number) => { this.deleteMenuBuilder(index) }
+        : undefined,
+      swipeRightAreaDistance: this.onItemDelete !== undefined ? DELETE_MENU_WIDTH : undefined,
       onRefresh: () => this.loader?.load('Refresh'),
       onLoadMore: () => this.loader?.load("More")
     })

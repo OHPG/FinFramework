@@ -16,6 +16,8 @@ struct EditServerPage {
 
   private viewModel = new EditServerViewModel(getContext())
 
+  private readonly promptAction = this.getUIContext().getPromptAction()
+
   @Provide activeServerId?: string = undefined
 
   @Builder
@@ -25,6 +27,18 @@ struct EditServerPage {
 
   aboutToAppear(): void {
     this.activeServerId = this.repository?.getActiveInfo()?.serverInfo.serverId
+  }
+
+  private onDeleteServer(item: Object, index: number): Promise<void> {
+    let serverInfo = item as ServerInfo
+    if (serverInfo.serverId === this.activeServerId) {
+      this.promptAction.showToast({message: $r('app.string.server_can_not_delete')})
+      return Promise.reject()
+    }
+    return this.repository!.deleteServer(serverInfo)
+      .then(() => {
+        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+      })
   }
 
   build() {
@@ -44,6 +58,7 @@ struct EditServerPage {
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
+        onItemDelete: (item, index) => this.onDeleteServer(item, index),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,
@@ -77,20 +92,6 @@ struct ServerItem {
   @Consume activeServerId?: string
 
   private readonly promptAction = this.getUIContext().getPromptAction()
-
-  @Builder
-  menuBuilder() {
-    // https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-popup-and-menu-components-menu
-    Menu() {
-      MenuItem({
-        startIcon: $r('sys.media.ohos_ic_public_remove'),
-        content: $r('app.string.menu_delete')
-      })
-        .onClick(() => {
-          this.deleteServer()
-        })
-    }
-  }
 
   private updateServerIcon() {
     switch (this.item?.serverType) {
@@ -141,7 +142,6 @@ struct ServerItem {
         .hitTestBehavior(HitTestMode.None)
     }
     .enabled(this.activeServerId !== this.item?.serverId)
-    .bindContextMenu(this.menuBuilder, ResponseType.LongPress)
     .width(CommonConstants.FULL_PERCENT)
     .height(60)
     .padding({
@@ -160,17 +160,6 @@ struct ServerItem {
       .then(() => {
         this.activeServerId = this.item?.serverId
         this.promptAction.showToast({message: $r('app.string.address_changed')})
-      })
-      .catch((error: Error) => {
-        this.promptAction.showToast({message: error.message})
-      })
-  }
-
-  private deleteServer() {
-    if (!this.item) return
-    this.repository?.deleteServer(this.item!)
-      .then(() => {
-        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
       })
       .catch((error: Error) => {
         this.promptAction.showToast({message: error.message})

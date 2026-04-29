@@ -15,6 +15,8 @@ struct EditAddressPage {
 
   private viewModel = new EditAddressViewModel(getContext())
 
+  private readonly promptAction = this.getUIContext().getPromptAction()
+
   @Provide activeAddressId?: string = undefined
 
   @Builder
@@ -24,6 +26,18 @@ struct EditAddressPage {
 
   aboutToAppear(): void {
     this.activeAddressId = this.repository?.getActiveInfo()?.addressInfo.addressId
+  }
+
+  private onDeleteAddress(item: Object, index: number): Promise<void> {
+    let addressInfo = item as AddressInfo
+    if (addressInfo.addressId === this.activeAddressId) {
+      this.promptAction.showToast({message: $r('app.string.address_can_not_delete')})
+      return Promise.reject()
+    }
+    return this.repository!.deleteAddress(addressInfo)
+      .then(() => {
+        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+      })
   }
 
   build() {
@@ -43,6 +57,7 @@ struct EditAddressPage {
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
+        onItemDelete: (item, index) => this.onDeleteAddress(item, index),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,
@@ -80,20 +95,6 @@ struct AddressItem {
 
   private readonly promptAction = this.getUIContext().getPromptAction()
 
-  @Builder
-  menuBuilder() {
-    // https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-popup-and-menu-components-menu
-    Menu() {
-      MenuItem({
-        startIcon: $r('sys.media.ohos_ic_public_remove'),
-        content: $r('app.string.menu_delete')
-      })
-        .onClick(() => {
-          this.deleteAddress()
-        })
-    }
-  }
-
   aboutToReuse(params: Record<string, object>): void {
     this.item = params['item'] as AddressInfo
   }
@@ -114,7 +115,6 @@ struct AddressItem {
         .hitTestBehavior(HitTestMode.None)
     }
     .enabled(this.activeAddressId !== this.item?.addressId)
-    .bindContextMenu(this.menuBuilder, ResponseType.LongPress)
     .width(CommonConstants.FULL_PERCENT)
     .height(48)
     .padding({
@@ -133,17 +133,6 @@ struct AddressItem {
       .then(() => {
         this.activeAddressId = this.item?.addressId
         this.promptAction.showToast({message: $r('app.string.address_changed')})
-      })
-      .catch((error: Error) => {
-        this.promptAction.showToast({message: error.message})
-      })
-  }
-
-  private deleteAddress() {
-    if (!this.item) return
-    this.repository?.deleteAddress(this.item!)
-      .then(() => {
-        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
       })
       .catch((error: Error) => {
         this.promptAction.showToast({message: error.message})
