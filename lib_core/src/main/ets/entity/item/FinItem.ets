@@ -26,6 +26,8 @@ export interface FinItem {
 
   seriesName?: string
 
+  seriesId?: string
+
   seasonId?: string
 
   canPlay?: boolean
