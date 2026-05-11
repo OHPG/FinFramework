@@ -35,3 +35,12 @@ export { ListRefreshView } from './src/main/ets/widget/refresh/ListRefreshView'
 export { RefreshRepository } from './src/main/ets/widget/refresh/RefreshRepository'
 export { ScrollRefreshView } from './src/main/ets/widget/refresh/ScrollRefreshView'
 export { SimpleRepository } from './src/main/ets/widget/refresh/SimpleRepository'
+
+// tree
+export { TreeView } from './src/main/ets/widget/tree/TreeView'
+export { TreeController } from './src/main/ets/widget/tree/TreeController'
+export { TreeNode } from './src/main/ets/widget/tree/TreeNode'
+
+// breadcrumb
+export { BreadcrumbNavigator } from './src/main/ets/widget/bar/BreadcrumbNavigator'
+export { BreadcrumbSegment } from './src/main/ets/model/BreadcrumbSegment'
