@@ -41,6 +41,8 @@ export class BreakpointSystem {
 
   public static readonly CURRENT_HEIGHT_BREAKPOINT = "currentHeightBreakpoint"
 
+  public static readonly IS_PAD = "isPad"
+
   private window?: window.Window
 
   private windowSizeCallback: Callback<Size> = (size) => {
@@ -52,10 +54,11 @@ export class BreakpointSystem {
   }
 
   private updateCurrentBreakpoint() {
-    AppStorage.setOrCreate(BreakpointSystem.CURRENT_WIDTH_BREAKPOINT
-      , this.window ? this.window.getUIContext().getWindowWidthBreakpoint() : WidthBreakpoint.WIDTH_SM)
+    let widthBp = this.window ? this.window.getUIContext().getWindowWidthBreakpoint() : WidthBreakpoint.WIDTH_SM
+    AppStorage.setOrCreate(BreakpointSystem.CURRENT_WIDTH_BREAKPOINT, widthBp)
     AppStorage.setOrCreate(BreakpointSystem.CURRENT_HEIGHT_BREAKPOINT
       , this.window ? this.window.getUIContext().getWindowHeightBreakpoint() : HeightBreakpoint.HEIGHT_SM)
+    AppStorage.setOrCreate(BreakpointSystem.IS_PAD, widthBp >= WidthBreakpoint.WIDTH_MD)
   }
 
   public register(window: window.Window) {
