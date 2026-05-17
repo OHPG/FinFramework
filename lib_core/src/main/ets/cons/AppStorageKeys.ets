@@ -12,4 +12,9 @@ export class AppStorageKeys {
    */
   public static readonly KEY_ACTIVE_INFO = "key_active_info"
 
+  /**
+   * Logger instance
+   */
+  public static readonly KEY_LOGGER = "app_logger"
+
 }

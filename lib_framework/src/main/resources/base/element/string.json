@@ -111,6 +111,78 @@
     {
       "name": "state_retry",
       "value": "点击重试"
+    },
+    {
+      "name": "log_page_title",
+      "value": "日志"
+    },
+    {
+      "name": "log_filter_module",
+      "value": "模块筛选"
+    },
+    {
+      "name": "log_filter_level",
+      "value": "级别筛选"
+    },
+    {
+      "name": "log_select_all",
+      "value": "全选"
+    },
+    {
+      "name": "log_deselect_all",
+      "value": "取消全选"
+    },
+    {
+      "name": "log_level_debug",
+      "value": "DEBUG"
+    },
+    {
+      "name": "log_level_info",
+      "value": "INFO"
+    },
+    {
+      "name": "log_level_warn",
+      "value": "WARN"
+    },
+    {
+      "name": "log_level_error",
+      "value": "ERROR"
+    },
+    {
+      "name": "log_export_success",
+      "value": "日志导出成功"
+    },
+    {
+      "name": "log_export_fail",
+      "value": "日志导出失败"
+    },
+    {
+      "name": "log_export_empty",
+      "value": "当前无日志可导出"
+    },
+    {
+      "name": "log_action_title",
+      "value": "操作"
+    },
+    {
+      "name": "log_action_enable",
+      "value": "开启日志"
+    },
+    {
+      "name": "log_action_disable",
+      "value": "关闭日志"
+    },
+    {
+      "name": "log_action_filter",
+      "value": "筛选"
+    },
+    {
+      "name": "log_action_export",
+      "value": "导出日志"
+    },
+    {
+      "name": "log_menu_more",
+      "value": "..."
     }
   ]
 }

@@ -62,3 +62,15 @@ export { MarketUtil } from './src/main/ets/util/MarketUtil'
 // system
 export { AvoidAreaSystem } from './src/main/ets/system/AvoidAreaSystem'
 export { BreakpointSystem, BreakpointType, BreakpointTypes } from './src/main/ets/system/BreakpointSystem'
+
+// log
+export { LogLevel } from './src/main/ets/log/LogLevel'
+export { LogEntry } from './src/main/ets/log/LogEntry'
+export { LogFilter } from './src/main/ets/log/LogFilter'
+export { LogOutput, LogListener } from './src/main/ets/log/LogOutput'
+export { RingBuffer } from './src/main/ets/log/RingBuffer'
+export { Logger } from './src/main/ets/log/Logger'
+export { ModuleLogger } from './src/main/ets/log/ModuleLogger'
+export { ConsoleLogOutput } from './src/main/ets/log/ConsoleLogOutput'
+export { FileLogOutput } from './src/main/ets/log/FileLogOutput'
+export { formatLogEntry, parseLogEntry, getLogFileName } from './src/main/ets/log/LogFormatter'

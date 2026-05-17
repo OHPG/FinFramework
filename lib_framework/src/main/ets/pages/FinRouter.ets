@@ -53,4 +53,14 @@ export class FinRouter {
     await router.pushNamedRoute({name: FinPages.PAGE_FIN_EDIT_USER})
   }
 
+  /**
+   * Open log page
+   * @returns
+   */
+  public static async openLog(context: UIContext): Promise<void> {
+    await import ('./log/LogPage')
+    let router = context.getRouter()
+    await router.pushNamedRoute({name: FinPages.PAGE_FIN_LOG})
+  }
+
 }

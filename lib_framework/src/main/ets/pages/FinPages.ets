@@ -27,4 +27,9 @@ export class FinPages {
    */
   public static readonly PAGE_FIN_EDIT_USER = "FinEditUserPage"
 
+  /**
+   * Log page
+   */
+  public static readonly PAGE_FIN_LOG = "FinLogPage"
+
 }

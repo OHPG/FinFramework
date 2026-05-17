@@ -1,4 +1,5 @@
 export { FinRouter } from './src/main/ets/pages/FinRouter';
+export { FinPages } from './src/main/ets/pages/FinPages';
 
 // data
 export { FinRepository } from './src/main/ets/data/FinRepository'
