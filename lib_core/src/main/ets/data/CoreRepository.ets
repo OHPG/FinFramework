@@ -65,7 +65,10 @@ export abstract class CoreRepository {
   public abstract getSupportServer(): Array<ServerType>
 
   protected requireApi(): CoreApi {
-    return this.finApi!
+    if (!this.finApi) {
+      throw new Error("No active server.")
+    }
+    return this.finApi
   }
 
   /**
@@ -102,6 +105,18 @@ export abstract class CoreRepository {
   }
 
   /**
+   * Clear active state, release API and notify.
+   */
+  private async clearActive(): Promise<void> {
+    await this.dataStore.deleteActive()
+    this.finApi?.release()
+    this.finApi = undefined
+    this.activeInfo = undefined
+    AppStorage.delete(AppStorageKeys.KEY_ACTIVE_INFO)
+    AppEventHub.emit(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
+  }
+
+  /**
    * get all server
    * @returns
    */
@@ -131,13 +146,18 @@ export abstract class CoreRepository {
   }
 
   /**
-   * delete server
+   * Delete server.
+   * If it's the current active server, cascade clear active state.
+   * If it's non-active, just delete its data.
    * @returns
    */
   public async deleteServer(serverInfo: ServerInfo): Promise<void> {
     await this.dataStore.deleteUserByServerId(serverInfo.serverId)
     await this.dataStore.deleteAddressByServerId(serverInfo.serverId)
     await this.dataStore.deleteServer(serverInfo.serverId)
+    if (this.activeInfo?.serverInfo.serverId === serverInfo.serverId) {
+      await this.clearActive()
+    }
   }
 
   /**
@@ -186,12 +206,24 @@ export abstract class CoreRepository {
   }
 
   /**
-   * delete address
+   * Delete address.
+   * If it's the current active address, try switching to another.
+   * If no other address remains, cascade delete the server.
    * @param addressInfo
    * @returns
    */
   public async deleteAddress(addressInfo: AddressInfo): Promise<void> {
     await this.dataStore.deleteAddress(addressInfo)
+    if (this.activeInfo?.addressInfo.addressId === addressInfo.addressId) {
+      let remaining = await this.dataStore.queryAllAddress(this.activeInfo.serverInfo.serverId)
+      if (remaining && remaining.length > 0) {
+        this.activeInfo.addressInfo = remaining[0]
+        await this.dataStore.updateActive(this.activeInfo)
+        this.initActiveInfo(this.activeInfo)
+      } else {
+        await this.deleteServer(this.activeInfo.serverInfo)
+      }
+    }
   }
 
   /**
@@ -217,12 +249,24 @@ export abstract class CoreRepository {
   }
 
   /**
-   * delete user
+   * Delete user.
+   * If it's the current active user, try switching to another.
+   * If no other user remains, cascade delete the server.
    * @param userInfo
    * @returns
    */
   public async deleteUser(userInfo: UserInfo): Promise<void> {
     await this.dataStore.deleteUser(userInfo)
+    if (this.activeInfo?.userInfo.userId === userInfo.userId) {
+      let remaining = await this.dataStore.queryAllUser(this.activeInfo.serverInfo.serverId)
+      if (remaining && remaining.length > 0) {
+        this.activeInfo.userInfo = remaining[0]
+        await this.dataStore.updateActive(this.activeInfo)
+        this.initActiveInfo(this.activeInfo)
+      } else {
+        await this.deleteServer(this.activeInfo.serverInfo)
+      }
+    }
   }
 
   /**

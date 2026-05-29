@@ -31,13 +31,13 @@ struct EditServerPage {
 
   private onDeleteServer(item: Object, index: number): Promise<void> {
     let serverInfo = item as ServerInfo
-    if (serverInfo.serverId === this.activeServerId) {
-      this.promptAction.showToast({message: $r('app.string.server_can_not_delete')})
-      return Promise.reject()
-    }
     return this.repository!.deleteServer(serverInfo)
       .then(() => {
-        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+        if (!this.repository!.getActiveInfo()) {
+          FinRouter.auth(this.getUIContext(), true)
+        } else {
+          this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+        }
       })
   }
 

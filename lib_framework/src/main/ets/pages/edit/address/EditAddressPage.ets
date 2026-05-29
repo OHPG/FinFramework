@@ -6,6 +6,7 @@ import { EditAddressViewModel } from './EditAddressViewModel'
 import { FinPages } from '../../FinPages'
 import { FinRepository } from '../../../data/FinRepository'
 import { AddAddressDialog } from './AddAddressDialog'
+import { FinRouter } from '../../FinRouter'
 
 @Entry({routeName: FinPages.PAGE_FIN_EDIT_ADDRESS})
 @Component
@@ -30,13 +31,15 @@ struct EditAddressPage {
 
   private onDeleteAddress(item: Object, index: number): Promise<void> {
     let addressInfo = item as AddressInfo
-    if (addressInfo.addressId === this.activeAddressId) {
-      this.promptAction.showToast({message: $r('app.string.address_can_not_delete')})
-      return Promise.reject()
-    }
     return this.repository!.deleteAddress(addressInfo)
       .then(() => {
-        this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+        if (!this.repository!.getActiveInfo()) {
+          FinRouter.auth(this.getUIContext(), true)
+        } else {
+          this.activeAddressId = this.repository?.getActiveInfo()?.addressInfo.addressId
+          this.viewModel.loadData()
+          this.promptAction.showToast({message: $r('app.string.address_delete_success')})
+        }
       })
   }
 

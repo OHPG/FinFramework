@@ -6,6 +6,7 @@ import { EditUserViewModel } from './EditUserViewModel'
 import { FinPages } from '../../FinPages'
 import { FinRepository } from '../../../data/FinRepository'
 import { AddUserDialog } from './AddUserDialog'
+import { FinRouter } from '../../FinRouter'
 
 @Preview
 @Entry({routeName: FinPages.PAGE_FIN_EDIT_USER})
@@ -31,13 +32,15 @@ struct EditUserPage {
 
   private onDeleteUser(item: Object, index: number): Promise<void> {
     let userInfo = item as UserInfo
-    if (userInfo.userId === this.activeUserId) {
-      this.promptAction.showToast({message: $r('app.string.user_can_not_delete')})
-      return Promise.reject()
-    }
     return this.repository!.deleteUser(userInfo)
       .then(() => {
-        this.promptAction.showToast({message: $r('app.string.user_delete_success')})
+        if (!this.repository!.getActiveInfo()) {
+          FinRouter.auth(this.getUIContext(), true)
+        } else {
+          this.activeUserId = this.repository?.getActiveInfo()?.userInfo.userId
+          this.viewModel.loadData()
+          this.promptAction.showToast({message: $r('app.string.user_delete_success')})
+        }
       })
   }
 
