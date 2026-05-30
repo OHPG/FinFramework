@@ -52,6 +52,7 @@ export { AppEventHub } from './src/main/ets/event/EventHub'
 export { AppEvents } from './src/main/ets/event/AppEvents'
 
 // tool
+export { FileTool } from './src/main/ets/tool/FileTool'
 export { TimeTool } from './src/main/ets/tool/TimeTool'
 export { WebTool } from './src/main/ets/tool/WebTool'
 export { StringTool } from './src/main/ets/tool/StringTool'
