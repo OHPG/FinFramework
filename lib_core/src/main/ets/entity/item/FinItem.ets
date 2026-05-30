@@ -61,4 +61,6 @@ export interface FinItem {
   index?: number
 
   collectionType?: FinCollectionType
+
+  providerIds?: Record<string, string>
 }
