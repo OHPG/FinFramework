@@ -52,10 +52,10 @@ export abstract class CoreRepository {
    */
   protected activeInfo?: ActiveInfo
 
-  constructor(context: Context, factory: ApiFactory) {
+  constructor(context: Context, factory: ApiFactory, dataStore?: DataStore) {
     this.context = context
     this.apiFactory = factory
-    this.dataStore = new DataStore(context)
+    this.dataStore = dataStore ?? new DataStore(context)
   }
 
   /**
@@ -82,7 +82,7 @@ export abstract class CoreRepository {
     }
   }
 
-  private initActiveInfo(activeInfo: ActiveInfo): void {
+  protected initActiveInfo(activeInfo: ActiveInfo): void {
     this.activeInfo = activeInfo
     let type = activeInfo.serverInfo.serverType
     if (this.finApi?.getApiType() !== type) {
@@ -301,7 +301,7 @@ export abstract class CoreRepository {
 
     let serverInfo: ServerInfo = {
       serverId: systemInfo.Id!,
-      serverName: systemInfo.ServerName!,
+      serverName: alias || systemInfo.ServerName!,
       serverType: type
     }
     let addressInfo: AddressInfo = {

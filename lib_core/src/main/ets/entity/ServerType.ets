@@ -25,6 +25,11 @@ export enum ServerType {
   /**
    * Plex server
    */
-  PLEX = "Plex"
+  PLEX = "Plex",
+
+  /**
+   * Local self-scraping mode
+   */
+  LOCAL = "Local"
 
 }
