@@ -11,6 +11,10 @@ export enum FinSortBy {
 
   SortName = 'SortName',
 
-  DateCreated ='DateCreated',
+  DateCreated = 'DateCreated',
+
+  PremiereDate = 'PremiereDate',
+
+  CommunityRating = 'CommunityRating',
 
 }

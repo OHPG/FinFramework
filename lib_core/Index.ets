@@ -45,6 +45,7 @@ export { FinSubSource } from './src/main/ets/entity/item/FinSubSource'
 export { FinSortBy } from './src/main/ets/entity/item/FinSortBy'
 export { FinSortOrder } from './src/main/ets/entity/item/FinSortOrder'
 export { FinPageSize } from './src/main/ets/entity/item/FinPageSize'
+export { FinItemQuery } from './src/main/ets/entity/item/FinItemQuery'
 
 // lifecycle
 export { ViewModel } from './src/main/ets/lifecycle/vm/ViewModel'
