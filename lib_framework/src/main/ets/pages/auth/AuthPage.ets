@@ -145,7 +145,7 @@ struct AuthPage {
           .alignRules({
             middle: {anchor: "__container__", align: HorizontalAlign.Center},
             top: { anchor: "__container__", align: VerticalAlign.Top},
-            bottom: { anchor: "server_type", align: VerticalAlign.Top}
+            bottom: { anchor: "server_address", align: VerticalAlign.Top}
           })
 
         Button($r('app.string.login_auth'))
