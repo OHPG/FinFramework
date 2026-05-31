@@ -22,9 +22,29 @@ export interface FinStream {
 
   isExternal: boolean
 
+  isDefault?: boolean
+
   path?: string
 
   channelLayout?: string
+
+  channels?: number
+
+  bitRate?: number
+
+  bitDepth?: number
+
+  sampleRate?: number
+
+  frameRate?: number
+
+  profile?: string
+
+  level?: number
+
+  aspectRatio?: string
+
+  pixelFormat?: string
 
   videoRangeType?: FinVideoRangeType
 
