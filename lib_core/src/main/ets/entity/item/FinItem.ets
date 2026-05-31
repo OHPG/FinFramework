@@ -38,6 +38,8 @@ export interface FinItem {
 
   sources?: Array<FinSource>
 
+  items?: Array<FinItem>
+
   runtimeTicks?: number
 
   unplayedItemCount?: number
