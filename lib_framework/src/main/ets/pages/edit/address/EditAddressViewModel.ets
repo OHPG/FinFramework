@@ -1,4 +1,5 @@
 import { LoadType } from "@ohpg/fin-core";
+import { AddressInfo } from "@ohpg/fin-core";
 import { ListViewModel } from "../../common/ListViewModel";
 /**
  * @Author peerless2012
@@ -14,6 +15,10 @@ export class EditAddressViewModel extends ListViewModel {
       .then((addresses) => {
         this.dataSource.initData(addresses)
       })
+  }
+
+  deleteAddress(item: Object): Promise<void> {
+    return this.repository.deleteAddress(item as AddressInfo)
   }
 
 }

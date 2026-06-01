@@ -1,4 +1,5 @@
 import { LoadType } from "@ohpg/fin-core";
+import { UserInfo } from "@ohpg/fin-core";
 import { ListViewModel } from "../../common/ListViewModel";
 /**
  * @Author peerless2012
@@ -14,6 +15,10 @@ export class EditUserViewModel extends ListViewModel {
       .then((users) => {
         this.dataSource.initData(users)
       })
+  }
+
+  deleteUser(item: Object): Promise<void> {
+    return this.repository.deleteUser(item as UserInfo)
   }
 
 }

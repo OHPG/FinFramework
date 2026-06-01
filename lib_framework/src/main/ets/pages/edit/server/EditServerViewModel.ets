@@ -20,4 +20,8 @@ export class EditServerViewModel extends ListViewModel {
       })
   }
 
+  deleteServer(item: Object): Promise<void> {
+    return this.repository.deleteServer(item as ServerInfo)
+  }
+
 }

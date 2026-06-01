@@ -1,4 +1,4 @@
-import { ActiveInfo, AddressInfo, LoadType } from '@ohpg/fin-core'
+import { AddressInfo } from '@ohpg/fin-core'
 import { ToolBar } from '../../../widget/bar/ToolBar'
 import { ListRefreshView } from '../../../widget/refresh/ListRefreshView'
 import { CommonConstants } from '../../../common/CommonConstants'
@@ -6,17 +6,12 @@ import { EditAddressViewModel } from './EditAddressViewModel'
 import { FinPages } from '../../FinPages'
 import { FinRepository } from '../../../data/FinRepository'
 import { AddAddressDialog } from './AddAddressDialog'
-import { FinRouter } from '../../FinRouter'
 
 @Entry({routeName: FinPages.PAGE_FIN_EDIT_ADDRESS})
 @Component
 struct EditAddressPage {
 
-  @StorageLink("Repository") repository?: FinRepository = undefined
-
   private viewModel = new EditAddressViewModel(getContext())
-
-  private readonly promptAction = this.getUIContext().getPromptAction()
 
   @Provide activeAddressId?: string = undefined
 
@@ -26,21 +21,7 @@ struct EditAddressPage {
   }
 
   aboutToAppear(): void {
-    this.activeAddressId = this.repository?.getActiveInfo()?.addressInfo.addressId
-  }
-
-  private onDeleteAddress(item: Object, index: number): Promise<void> {
-    let addressInfo = item as AddressInfo
-    return this.repository!.deleteAddress(addressInfo)
-      .then(() => {
-        if (!this.repository!.getActiveInfo()) {
-          FinRouter.auth(this.getUIContext(), true)
-        } else {
-          this.activeAddressId = this.repository?.getActiveInfo()?.addressInfo.addressId
-          this.viewModel.loadData()
-          this.promptAction.showToast({message: $r('app.string.address_delete_success')})
-        }
-      })
+    this.activeAddressId = this.viewModel.repository.getActiveInfo()?.addressInfo.addressId
   }
 
   build() {
@@ -60,7 +41,10 @@ struct EditAddressPage {
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
-        onItemDelete: (item, index) => this.onDeleteAddress(item, index),
+        onItemDelete: (item, index) => this.viewModel.deleteAddress(item).then(() => {
+          // 删除后同步活跃地址（可能已自动切换到其他地址）
+          this.activeAddressId = this.viewModel.repository.getActiveInfo()?.addressInfo.addressId
+        }),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,

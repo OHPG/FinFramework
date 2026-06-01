@@ -6,18 +6,13 @@ import { EditUserViewModel } from './EditUserViewModel'
 import { FinPages } from '../../FinPages'
 import { FinRepository } from '../../../data/FinRepository'
 import { AddUserDialog } from './AddUserDialog'
-import { FinRouter } from '../../FinRouter'
 
 @Preview
 @Entry({routeName: FinPages.PAGE_FIN_EDIT_USER})
 @Component
 struct EditUserPage {
 
-  @StorageLink("Repository") repository?: FinRepository = undefined
-
   private viewModel = new EditUserViewModel(getContext())
-
-  private readonly promptAction = this.getUIContext().getPromptAction()
 
   @Provide activeUserId?: string = undefined
 
@@ -27,21 +22,7 @@ struct EditUserPage {
   }
 
   aboutToAppear(): void {
-    this.activeUserId = this.repository?.getActiveInfo()?.userInfo.userId
-  }
-
-  private onDeleteUser(item: Object, index: number): Promise<void> {
-    let userInfo = item as UserInfo
-    return this.repository!.deleteUser(userInfo)
-      .then(() => {
-        if (!this.repository!.getActiveInfo()) {
-          FinRouter.auth(this.getUIContext(), true)
-        } else {
-          this.activeUserId = this.repository?.getActiveInfo()?.userInfo.userId
-          this.viewModel.loadData()
-          this.promptAction.showToast({message: $r('app.string.user_delete_success')})
-        }
-      })
+    this.activeUserId = this.viewModel.repository.getActiveInfo()?.userInfo.userId
   }
 
   build() {
@@ -61,7 +42,10 @@ struct EditUserPage {
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
-        onItemDelete: (item, index) => this.onDeleteUser(item, index),
+        onItemDelete: (item, index) => this.viewModel.deleteUser(item).then(() => {
+          // 删除后同步活跃用户（可能已自动切换到其他用户）
+          this.activeUserId = this.viewModel.repository.getActiveInfo()?.userInfo.userId
+        }),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,

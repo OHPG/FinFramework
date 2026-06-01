@@ -12,11 +12,7 @@ import { FinRouter } from '../../FinRouter'
 @Component
 struct EditServerPage {
 
-  @StorageLink("Repository") repository?: FinRepository = undefined
-
   private viewModel = new EditServerViewModel(getContext())
-
-  private readonly promptAction = this.getUIContext().getPromptAction()
 
   @Provide activeServerId?: string = undefined
 
@@ -26,19 +22,7 @@ struct EditServerPage {
   }
 
   aboutToAppear(): void {
-    this.activeServerId = this.repository?.getActiveInfo()?.serverInfo.serverId
-  }
-
-  private onDeleteServer(item: Object, index: number): Promise<void> {
-    let serverInfo = item as ServerInfo
-    return this.repository!.deleteServer(serverInfo)
-      .then(() => {
-        if (!this.repository!.getActiveInfo()) {
-          FinRouter.auth(this.getUIContext(), true)
-        } else {
-          this.promptAction.showToast({message: $r('app.string.address_delete_success')})
-        }
-      })
+    this.activeServerId = this.viewModel.repository.getActiveInfo()?.serverInfo.serverId
   }
 
   build() {
@@ -52,13 +36,13 @@ struct EditServerPage {
           .height(36)
           .padding(5)
           .onClick(() => {
-            this.onAddServer()
+            FinRouter.auth(this.getUIContext())
           })
       }
       ListRefreshView({
         source: this.viewModel,
         itemLayout: this.itemView,
-        onItemDelete: (item, index) => this.onDeleteServer(item, index),
+        onItemDelete: (item, index) => this.viewModel.deleteServer(item),
         listAttribute: (attr) => {
           attr.divider = {
             color: Color.Transparent,
@@ -71,10 +55,6 @@ struct EditServerPage {
         .width(CommonConstants.FULL_PERCENT)
         .layoutWeight(1)
     }
-  }
-
-  private onAddServer() {
-    FinRouter.auth(this.getUIContext())
   }
 }
 
