@@ -43,4 +43,43 @@ export class FileTool {
     fs.writeSync(file.fd, content)
     fs.closeSync(file)
   }
+
+  /**
+   * 获取目录总大小（字节），非递归
+   * @param dir 目录路径
+   * @returns 目录下所有文件的总大小
+   */
+  public static getDirSize(dir: string): number {
+    try {
+      let files = fs.listFileSync(dir)
+      let total = 0
+      for (let file of files) {
+        try {
+          let stat = fs.statSync(dir + '/' + file)
+          total += stat.size
+        } catch (_) {
+        }
+      }
+      return total
+    } catch (_) {
+      return 0
+    }
+  }
+
+  /**
+   * 删除目录下所有文件（非递归）
+   * @param dir 目录路径
+   */
+  public static clearDir(dir: string): void {
+    try {
+      let files = fs.listFileSync(dir)
+      for (let file of files) {
+        try {
+          fs.unlinkSync(dir + '/' + file)
+        } catch (_) {
+        }
+      }
+    } catch (_) {
+    }
+  }
 }
