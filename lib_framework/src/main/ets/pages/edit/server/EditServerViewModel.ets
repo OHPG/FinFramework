@@ -1,4 +1,5 @@
 import { LoadType } from "@ohpg/fin-core";
+import { ServerInfo } from "@ohpg/fin-core";
 import { ListViewModel } from "../../common/ListViewModel";
 /**
  * @Author peerless2012
