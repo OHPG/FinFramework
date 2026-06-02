@@ -9,6 +9,22 @@ import { FinSubSource } from "./FinSubSource"
  */
 export interface FinItemSource {
 
+  /**
+   * 版本唯一标识（供选定版本后传回 getItemSources 使用）
+   * Jellyfin/Emby: MediaSource.Id
+   * Plex: Media.id
+   * Local: MediaInfo.id
+   */
+  id: string
+
+  /**
+   * 版本展示名称（供版本选择器展示）
+   * Jellyfin/Emby: MediaSource.Name
+   * Plex: Media 分辨率/编码信息
+   * Local: 文件名
+   */
+  name: string
+
   url: string
 
   sdr: boolean
