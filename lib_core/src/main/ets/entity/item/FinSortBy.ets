@@ -7,7 +7,7 @@
  */
 export enum FinSortBy {
 
-  Name = "Name",
+  Name = "SortName",
 
   SortName = 'SortName',
 
