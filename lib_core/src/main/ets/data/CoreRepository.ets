@@ -181,7 +181,7 @@ export abstract class CoreRepository {
     if (preAddress) {
       throw new Error("Url already exists.")
     }
-    let systemInfo = await this.finApi!.getSystemInfo(url)
+    let systemInfo = await this.finApi!.getPublicSystemInfo(url)
     if (systemInfo.Id === this.activeInfo!.serverInfo.serverId) {
       let addressInfo: AddressInfo = {
         address: url,
