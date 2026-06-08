@@ -14,6 +14,4 @@ export interface FinView {
   name: string
 
   items?: Array<FinItem>,
-
-  type: CollectionType
 }

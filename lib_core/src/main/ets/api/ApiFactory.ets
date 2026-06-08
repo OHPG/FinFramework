@@ -1,8 +1,7 @@
-import { MD5 } from "../crypto/MD5";
+import { PrivacyProvider } from "../privacy/PrivacyProvider";
 import { CoreApi } from "./CoreApi";
 import { ServerType } from "../entity/ServerType";
 import { bundleManager } from "@kit.AbilityKit";
-import { deviceInfo } from "@kit.BasicServicesKit";
 import { ClientInfo, DeviceInfo } from "@ohpg/network";
 
 /**
@@ -25,7 +24,7 @@ export abstract class ApiFactory {
   protected readonly clientInfo: ClientInfo
 
   /**
-   * Device info
+   * Device info（惰性，首次访问 .id 时才读取 ODID）
    */
   protected readonly deviceInfo: DeviceInfo
 
@@ -37,11 +36,7 @@ export abstract class ApiFactory {
       name: module,
       version: info.versionName
     }
-    this.deviceInfo = {
-      // Same developer has same odid.
-      id: MD5.digestSync(deviceInfo.ODID + "-" + module),
-      name: deviceInfo.marketName
-    }
+    this.deviceInfo = PrivacyProvider.getInstance()
   }
 
   protected abstract onCreateApi<T extends CoreApi>(serverType: ServerType): T;
