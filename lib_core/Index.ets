@@ -17,6 +17,9 @@ export { AppStorageKeys } from './src/main/ets/cons/AppStorageKeys'
 export { CoreApi } from './src/main/ets/api/CoreApi'
 export { ApiFactory } from './src/main/ets/api/ApiFactory'
 
+// privacy
+export { PrivacyProvider } from './src/main/ets/privacy/PrivacyProvider'
+
 // cache
 export { CacheRef } from './src/main/ets/cache/CacheRef'
 export { ImageRef } from './src/main/ets/cache/ImageRef'
