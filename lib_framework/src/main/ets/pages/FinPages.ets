@@ -32,4 +32,9 @@ export class FinPages {
    */
   public static readonly PAGE_FIN_LOG = "FinLogPage"
 
+  /**
+   * WebKit page
+   */
+  public static readonly PAGE_FIN_WEBKIT = "FinWebKitPage"
+
 }

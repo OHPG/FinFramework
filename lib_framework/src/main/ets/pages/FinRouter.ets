@@ -1,4 +1,5 @@
 import { FinPages } from "./FinPages";
+import { WebKitOption } from "./web/WebKitOption";
 
 /**
  * @Author peerless2012
@@ -61,6 +62,19 @@ export class FinRouter {
     await import ('./log/LogPage')
     let router = context.getRouter()
     await router.pushNamedRoute({name: FinPages.PAGE_FIN_LOG})
+  }
+
+  /**
+   * Open WebKit page (内置浏览器)
+   * @param context UIContext
+   * @param title 页面标题
+   * @param url 目标地址
+   */
+  public static async openWebKit(context: UIContext, title: ResourceStr, url: string): Promise<void> {
+    await import('./web/WebKitPage')
+    let options: WebKitOption = { title: title, url: url }
+    let router = context.getRouter()
+    await router.pushNamedRoute({ name: FinPages.PAGE_FIN_WEBKIT, params: options })
   }
 
 }

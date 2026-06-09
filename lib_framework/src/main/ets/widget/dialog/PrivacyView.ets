@@ -1,6 +1,6 @@
-import { WebTool } from "@ohpg/fin-core"
 import { bundleManager, common } from "@kit.AbilityKit"
 import { PrivacyOptions } from "../../dialog/PrivacyDialog"
+import { FinWebTool } from "../../tool/FinWebTool"
 
 @Component
 export struct PrivacyView {
@@ -27,7 +27,7 @@ export struct PrivacyView {
         Span("《隐私声明》")
           .fontColor($r('sys.color.ohos_id_color_activated'))
           .onClick(() => {
-            WebTool.openBrowser(getContext(), this.options!.privacy!)
+            FinWebTool.open(this.getUIContext(), "隐私声明",this.options!.privacy!)
           })
         Span("点击\“同意\”，表示您同意此声明。")
       }

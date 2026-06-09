@@ -1,6 +1,9 @@
 export { FinRouter } from './src/main/ets/pages/FinRouter';
 export { FinPages } from './src/main/ets/pages/FinPages';
 
+// tool
+export { FinWebTool } from './src/main/ets/tool/FinWebTool'
+
 // data
 export { FinRepository } from './src/main/ets/data/FinRepository'
 export { FinApi } from './src/main/ets/api/FinApi'
