@@ -30,6 +30,7 @@ export abstract class ApiFactory {
 
   constructor(context: Context, module: string) {
     this.context = context
+    PrivacyProvider.init(module)
     let info = bundleManager.getBundleInfoForSelfSync(bundleManager
       .BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
     this.clientInfo = {

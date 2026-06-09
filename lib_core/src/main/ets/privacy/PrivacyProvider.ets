@@ -30,10 +30,12 @@ export class PrivacyProvider implements DeviceInfo {
   }
 
   /**
-   * 初始化（App 启动时调用一次）
+   * 初始化（首次调用时创建单例，后续调用忽略）
    */
   static init(module: string): void {
-    PrivacyProvider.instance = new PrivacyProvider(module)
+    if (!PrivacyProvider.instance) {
+      PrivacyProvider.instance = new PrivacyProvider(module)
+    }
   }
 
   /**
