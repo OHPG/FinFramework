@@ -65,4 +65,9 @@ export interface FinItem {
   collectionType?: FinCollectionType
 
   providerIds?: Record<string, string>
+
+  /**
+   * 是否为虚拟条目（Jellyfin/Emby 中 LocationType === "Virtual" 的集，即尚未入库的缺失集）
+   */
+  isVirtual?: boolean
 }
