@@ -27,9 +27,8 @@ export struct SideNavBar {
         })
       }, (_meta: NavTabMeta, index: number) => index.toString())
     }
-    .padding({ top: 12, bottom: 12, left: 12, right: 12 })
-    .margin({ left: 8 }) // 保留一点左侧间距
-    .width(80) // 固定宽度，便于居中
+    .padding({ top: 12, bottom: 12})
+    .margin({ left: px2vp(this.currentAvoidArea?.leftRect.width ?? 0) + 8, right: 8 })
     .borderRadius(28)
     .backgroundBlurStyle(BlurStyle.Thin)
     .backgroundColor($r('sys.color.comp_background_secondary'))
