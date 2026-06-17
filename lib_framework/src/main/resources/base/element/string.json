@@ -1,6 +1,34 @@
 {
   "string": [
     {
+      "name": "privacy_dialog_title",
+      "value": "温馨提示"
+    },
+    {
+      "name": "privacy_dialog_welcome_prefix",
+      "value": "欢迎使用"
+    },
+    {
+      "name": "privacy_dialog_content_prefix",
+      "value": "在您使用本应用之前，请仔细阅读我们的"
+    },
+    {
+      "name": "privacy_dialog_privacy_link",
+      "value": "《隐私声明》"
+    },
+    {
+      "name": "privacy_dialog_content_suffix",
+      "value": "。点击「同意」即表示您已阅读并同意以上声明。"
+    },
+    {
+      "name": "privacy_dialog_agree",
+      "value": "同意"
+    },
+    {
+      "name": "privacy_dialog_disagree",
+      "value": "不同意"
+    },
+    {
       "name": "server_address",
       "value": "服务器地址"
     },
