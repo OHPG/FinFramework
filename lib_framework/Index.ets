@@ -31,6 +31,11 @@ export { Sheet } from './src/main/ets/sheet/Sheet'
 
 // widget
 export { ToolBar } from './src/main/ets/widget/bar/ToolBar'
+export { NavTabMeta } from './src/main/ets/widget/nav/NavTabMeta'
+export { NavTabItem } from './src/main/ets/widget/nav/NavTabItem'
+export { BottomNavBar } from './src/main/ets/widget/nav/BottomNavBar'
+export { SideNavBar } from './src/main/ets/widget/nav/SideNavBar'
+export { AdaptiveNavBar } from './src/main/ets/widget/nav/AdaptiveNavBar'
 export { LoadingStateView } from './src/main/ets/widget/state/LoadingStateView'
 export { EmptyStateView } from './src/main/ets/widget/state/EmptyStateView'
 export { ErrorStateView } from './src/main/ets/widget/state/ErrorStateView'
