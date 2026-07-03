@@ -104,4 +104,10 @@ export default class LazyDataSource<T> extends BasicDataSource<T> {
   public isEmpty(): boolean {
     return this.dataArray.length === 0;
   }
+
+  public moveData(from: number, to: number): void {
+    const item = this.dataArray.splice(from, 1)[0];
+    this.dataArray.splice(to, 0, item);
+    this.notifyDataMove(from, to);
+  }
 }
