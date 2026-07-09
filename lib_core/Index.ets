@@ -66,6 +66,7 @@ export { StringTool } from './src/main/ets/tool/StringTool'
 
 // util
 export { MarketUtil } from './src/main/ets/util/MarketUtil'
+export { CommentTool } from './src/main/ets/util/CommentTool'
 
 // system
 export { AvoidAreaSystem } from './src/main/ets/system/AvoidAreaSystem'
