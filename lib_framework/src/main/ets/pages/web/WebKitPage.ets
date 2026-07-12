@@ -23,6 +23,7 @@ struct WebKitPage {
       }
 
       Web({ src: this.webkitOption?.url, controller: new webview.WebviewController() })
+        .onSslErrorEvent((callback) => { callback.handler.handleConfirm()})
         .domStorageAccess(true)
         .width(CommonConstants.FULL_PERCENT)
         .layoutWeight(1)
