@@ -1,7 +1,7 @@
 import { CoreRepository, ServerType, StringTool } from '@ohpg/fin-core'
 import { FinPages } from '../FinPages'
 import { ProgressDialog } from '../../dialog/ProgressDialog'
-import { bundleManager, common } from '@kit.AbilityKit'
+import { bundleManager } from '@kit.AbilityKit'
 import { ToolBar } from '../../widget/bar/ToolBar'
 
 /**
@@ -220,13 +220,7 @@ struct AuthPage {
     this.repository?.authAccount(this.serverType, url, userName, userPsw, alias)
       .then(() => {
         this.progressDialog?.dismiss()
-        let state = this.getUIContext().getRouter().getStateByIndex(0)
-        if (state?.name == "pages/home/HomePage") {
-          this.getUIContext().getRouter().back(0)
-        } else {
-          (this.getUIContext().getHostContext() as common.UIAbilityContext).windowStage
-            .loadContent("pages/home/HomePage")
-        }
+        this.getUIContext().getRouter().back()
       })
       .catch((error: Error) => {
         this.progressDialog?.dismiss()

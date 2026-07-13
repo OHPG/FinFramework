@@ -112,7 +112,7 @@ export abstract class CoreRepository {
     this.finApi?.release()
     this.finApi = undefined
     this.activeInfo = undefined
-    AppStorage.delete(AppStorageKeys.KEY_ACTIVE_INFO)
+    AppStorage.setOrCreate(AppStorageKeys.KEY_ACTIVE_INFO, undefined)
     AppEventHub.emit(AppEvents.EVENT_ACTIVE_INFO_CHANGED)
   }
 
@@ -147,7 +147,8 @@ export abstract class CoreRepository {
 
   /**
    * Delete server.
-   * If it's the current active server, cascade clear active state.
+   * If it's the current active server, try switching to another available server.
+   * If no other server remains, cascade clear active state.
    * If it's non-active, just delete its data.
    * @returns
    */
@@ -156,7 +157,12 @@ export abstract class CoreRepository {
     await this.dataStore.deleteAddressByServerId(serverInfo.serverId)
     await this.dataStore.deleteServer(serverInfo.serverId)
     if (this.activeInfo?.serverInfo.serverId === serverInfo.serverId) {
-      await this.clearActive()
+      let remaining = await this.dataStore.queryAllServer()
+      if (remaining && remaining.length > 0) {
+        await this.selectServer(remaining[0])
+      } else {
+        await this.clearActive()
+      }
     }
   }
 
