@@ -1,5 +1,6 @@
 export { Cipher } from './src/main/ets/crypto/Cipher'
 export { MD5 } from './src/main/ets/crypto/MD5'
+export { SHA256 } from './src/main/ets/crypto/SHA256'
 export { DataStore } from './src/main/ets/store/DataStore'
 export { StoreHelper } from './src/main/ets/store/helper/StoreHelper'
 export { ActiveInfo } from './src/main/ets/entity/ActiveInfo'
