@@ -15,6 +15,8 @@ export enum FinSortBy {
 
   PremiereDate = 'PremiereDate',
 
+  ProductionYear = 'ProductionYear',
+
   CommunityRating = 'CommunityRating',
 
 }
