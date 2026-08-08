@@ -91,6 +91,11 @@ export class AvoidAreaSystem {
     this.avoidAreaMap.forEach((area) => {
       this.mergeArea(this.avoidArea, area, windowRect)
     })
+    // 将合并结果从 px 转为 vp，保持与 ArkUI 布局单位一致
+    this.avoidArea.topRect = this.toVp(this.avoidArea.topRect)
+    this.avoidArea.bottomRect = this.toVp(this.avoidArea.bottomRect)
+    this.avoidArea.leftRect = this.toVp(this.avoidArea.leftRect)
+    this.avoidArea.rightRect = this.toVp(this.avoidArea.rightRect)
     AppStorage.setOrCreate(AvoidAreaSystem.CURRENT_AVOID_AREA, this.avoidArea)
     AvoidAreaSystem.onChangeCallbacks.forEach((cb) => cb(this.avoidArea))
   }
@@ -153,6 +158,18 @@ export class AvoidAreaSystem {
     rect.height = 0
     rect.left = 0
     rect.top = 0
+  }
+
+  /**
+   * 将 Rect 从 px 转为 vp，与 ArkUI 布局单位对齐
+   */
+  private toVp(rect: window.Rect): window.Rect {
+    return {
+      left: px2vp(rect.left),
+      top: px2vp(rect.top),
+      width: px2vp(rect.width),
+      height: px2vp(rect.height)
+    }
   }
 
   unregister() {
