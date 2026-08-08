@@ -13,6 +13,37 @@ export class AvoidAreaSystem {
 
   public static readonly CURRENT_WINDOW = "currentWindow"
 
+  /**
+   * 订阅回调列表，支持多个观察者
+   */
+  private static onChangeCallbacks: Array<(avoidArea: window.AvoidArea) => void> = []
+
+  /**
+   * 注册回调，当 avoidArea 变化时触发
+   */
+  public static observe(changeCallback: (avoidArea: window.AvoidArea) => void): void {
+    if (AvoidAreaSystem.onChangeCallbacks.indexOf(changeCallback) < 0) {
+      AvoidAreaSystem.onChangeCallbacks.push(changeCallback)
+    }
+  }
+
+  /**
+   * 取消订阅
+   */
+  public static unobserve(changeCallback: (avoidArea: window.AvoidArea) => void): void {
+    const idx = AvoidAreaSystem.onChangeCallbacks.indexOf(changeCallback)
+    if (idx >= 0) {
+      AvoidAreaSystem.onChangeCallbacks.splice(idx, 1)
+    }
+  }
+
+  /**
+   * 获取当前 avoidArea（已转为 vp）
+   */
+  public static get current(): window.AvoidArea | undefined {
+    return AppStorage.get(AvoidAreaSystem.CURRENT_AVOID_AREA) as window.AvoidArea | undefined
+  }
+
   private win?: window.Window
 
   private avoidArea: window.AvoidArea = {
@@ -61,6 +92,7 @@ export class AvoidAreaSystem {
       this.mergeArea(this.avoidArea, area, windowRect)
     })
     AppStorage.setOrCreate(AvoidAreaSystem.CURRENT_AVOID_AREA, this.avoidArea)
+    AvoidAreaSystem.onChangeCallbacks.forEach((cb) => cb(this.avoidArea))
   }
 
   /**
