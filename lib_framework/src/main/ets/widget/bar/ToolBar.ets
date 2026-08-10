@@ -19,7 +19,7 @@ export struct ToolBar {
 
       Column()
         .width('100%')
-        .height(this.getUIContext().px2vp(this.avoidArea?.topRect.height))
+        .height(this.avoidArea?.topRect.height)
 
       Row({space: CommonConstants.SPACE_16}) {
         Image($r('sys.media.ohos_ic_compnent_titlebar_back_filled'))
