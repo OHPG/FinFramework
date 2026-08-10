@@ -13,7 +13,7 @@ export struct BottomNavBar {
 
   @Require @Prop currentIndex: number
 
-  @StorageProp('currentAvoidArea') currentAvoidArea?: window.AvoidArea = undefined
+  @StorageProp('currentAvoidArea') avoidArea?: window.AvoidArea = undefined
 
   onTabSelect?: (index: number) => void
 
@@ -29,7 +29,7 @@ export struct BottomNavBar {
       }, (_meta: NavTabMeta, index: number) => index.toString())
     }
     .padding({ left: 12, right: 12 })
-    .margin({ bottom: (this.currentAvoidArea?.bottomRect.height) || CommonConstants.SPACE_8 })
+    .margin({ bottom: (this.avoidArea?.bottomRect.height) || CommonConstants.SPACE_8 })
     .width('auto') // 自适应宽度
     .borderRadius(28)
     .backgroundBlurStyle(BlurStyle.Thin)

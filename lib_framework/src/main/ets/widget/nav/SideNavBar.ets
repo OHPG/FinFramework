@@ -12,7 +12,7 @@ export struct SideNavBar {
 
   @Require @Prop currentIndex: number
 
-  @StorageProp('currentAvoidArea') currentAvoidArea?: window.AvoidArea = undefined
+  @StorageProp('currentAvoidArea') avoidArea?: window.AvoidArea = undefined
 
   onTabSelect?: (index: number) => void
 
@@ -28,7 +28,7 @@ export struct SideNavBar {
       }, (_meta: NavTabMeta, index: number) => index.toString())
     }
     .padding({ top: 12, bottom: 12})
-    .margin({ left: (this.currentAvoidArea?.leftRect.width ?? 0) + 8, right: 8 })
+    .margin({ left: (this.avoidArea?.leftRect.width ?? 0) + 8, right: 8 })
     .borderRadius(28)
     .backgroundBlurStyle(BlurStyle.Thin)
     .backgroundColor($r('sys.color.comp_background_secondary'))
