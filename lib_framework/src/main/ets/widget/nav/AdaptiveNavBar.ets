@@ -55,20 +55,20 @@ export struct AdaptiveNavBar {
 
   private updateOffsets(): void {
     if (this.tabs.length <= 1) {
-      this.navTopOffset = 0 + px2vp(this.avoidArea?.topRect.height)
-      this.navBottomOffset = 0 + px2vp(this.avoidArea?.bottomRect.height)
-      this.navStartOffset = 0 + px2vp(this.avoidArea?.leftRect.width)
-      this.navEndOffset = 0 + px2vp(this.avoidArea?.rightRect.width)
+      this.navTopOffset = 0 + (this.avoidArea?.topRect.height || 0)
+      this.navBottomOffset = 0 + (this.avoidArea?.bottomRect.height || 0)
+      this.navStartOffset = 0 + (this.avoidArea?.leftRect.width || 0)
+      this.navEndOffset = 0 + (this.avoidArea?.rightRect.width || 0)
     } else if (this.isCompactHeight) {
-      this.navTopOffset = 0 + px2vp(this.avoidArea?.topRect.height)
-      this.navBottomOffset = 0 + px2vp(this.avoidArea?.bottomRect.height)
-      this.navStartOffset = 88 + px2vp(this.avoidArea?.leftRect.width)
-      this.navEndOffset = 0 + px2vp(this.avoidArea?.rightRect.width)
+      this.navTopOffset = 0 + (this.avoidArea?.topRect.height || 0)
+      this.navBottomOffset = 0 + (this.avoidArea?.bottomRect.height || 0)
+      this.navStartOffset = 88 + (this.avoidArea?.leftRect.width || 0)
+      this.navEndOffset = 0 + (this.avoidArea?.rightRect.width || 0)
     } else {
-      this.navTopOffset = 0 + px2vp(this.avoidArea?.topRect.height)
-      this.navBottomOffset = 66 + px2vp(this.avoidArea?.bottomRect.height)
-      this.navStartOffset = 0 + px2vp(this.avoidArea?.leftRect.width)
-      this.navEndOffset = 0 + px2vp(this.avoidArea?.rightRect.width)
+      this.navTopOffset = 0 + (this.avoidArea?.topRect.height || 0)
+      this.navBottomOffset = 66 + (this.avoidArea?.bottomRect.height || 0)
+      this.navStartOffset = 0 + (this.avoidArea?.leftRect.width || 0)
+      this.navEndOffset = 0 + (this.avoidArea?.rightRect.width || 0)
     }
   }
 

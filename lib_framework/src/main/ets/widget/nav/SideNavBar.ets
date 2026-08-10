@@ -28,7 +28,7 @@ export struct SideNavBar {
       }, (_meta: NavTabMeta, index: number) => index.toString())
     }
     .padding({ top: 12, bottom: 12})
-    .margin({ left: px2vp(this.currentAvoidArea?.leftRect.width ?? 0) + 8, right: 8 })
+    .margin({ left: (this.currentAvoidArea?.leftRect.width ?? 0) + 8, right: 8 })
     .borderRadius(28)
     .backgroundBlurStyle(BlurStyle.Thin)
     .backgroundColor($r('sys.color.comp_background_secondary'))

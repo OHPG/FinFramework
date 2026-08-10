@@ -29,7 +29,7 @@ export struct BottomNavBar {
       }, (_meta: NavTabMeta, index: number) => index.toString())
     }
     .padding({ left: 12, right: 12 })
-    .margin({ bottom: px2vp(this.currentAvoidArea?.bottomRect.height) || CommonConstants.SPACE_8 })
+    .margin({ bottom: (this.currentAvoidArea?.bottomRect.height) || CommonConstants.SPACE_8 })
     .width('auto') // 自适应宽度
     .borderRadius(28)
     .backgroundBlurStyle(BlurStyle.Thin)
