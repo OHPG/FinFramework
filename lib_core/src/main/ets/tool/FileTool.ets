@@ -45,6 +45,17 @@ export class FileTool {
   }
 
   /**
+   * 从文件读取内容
+   * @param path 文件路径
+   */
+  public static readText(path: string): string {
+    let file = fs.openSync(path, fs.OpenMode.READ_ONLY)
+    const txt = fs.readTextSync(file.path)
+    fs.closeSync(file)
+    return txt
+  }
+
+  /**
    * 获取目录总大小（字节），非递归
    * @param dir 目录路径
    * @returns 目录下所有文件的总大小
