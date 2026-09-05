@@ -41,6 +41,9 @@ export class BreakpointSystem {
 
   public static readonly CURRENT_HEIGHT_BREAKPOINT = "currentHeightBreakpoint"
 
+  /** 窗口宽度，单位 vp */
+  public static readonly CURRENT_WINDOW_WIDTH_VP = "currentWindowWidthVp"
+
   /** 窗口高度，单位 vp */
   public static readonly CURRENT_WINDOW_HEIGHT_VP = "currentWindowHeightVp"
 
@@ -61,7 +64,10 @@ export class BreakpointSystem {
     AppStorage.setOrCreate(BreakpointSystem.CURRENT_WIDTH_BREAKPOINT, widthBp)
     AppStorage.setOrCreate(BreakpointSystem.CURRENT_HEIGHT_BREAKPOINT
       , this.window ? this.window.getUIContext().getWindowHeightBreakpoint() : HeightBreakpoint.HEIGHT_SM)
-    const heightPx = this.window ? this.window.getWindowProperties().windowRect.height : 0
+    const windowRect = this.window ? this.window.getWindowProperties().windowRect : undefined
+    const widthPx = windowRect ? windowRect.width : 0
+    const heightPx = windowRect ? windowRect.height : 0
+    AppStorage.setOrCreate(BreakpointSystem.CURRENT_WINDOW_WIDTH_VP, px2vp(widthPx))
     AppStorage.setOrCreate(BreakpointSystem.CURRENT_WINDOW_HEIGHT_VP, px2vp(heightPx))
     AppStorage.setOrCreate(BreakpointSystem.IS_PAD, widthBp >= WidthBreakpoint.WIDTH_MD)
   }
