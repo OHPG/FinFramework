@@ -105,6 +105,13 @@ export class AvoidAreaSystem {
    * 每个方向根据 rect 的位置和尺寸计算真实侵入深度，取各 type 中的最大值。
    */
   private mergeArea(target: window.AvoidArea, source: window.AvoidArea, windowRect?: window.Rect) {
+    // 跳过当前不可见的避让区。系统会为不构成实际遮挡的区域返回 visible=false 且携带
+    // 非零 rect（例如横屏时的挖孔 TYPE_CUTOUT 的 leftRect={left:20,width:47}）。
+    // 若不判断 visible，这类区域会被误算成侧边避让，导致横竖屏切换后凭空多出边距
+    // （实测横屏挖孔造成左侧多出 67px ≈ 29.78vp）。
+    if (source.visible === false) {
+      return
+    }
     // top: 侵入深度 = top + height（rect 下边界到屏幕顶部的距离）
     const topDepth = source.topRect.top + source.topRect.height
     if (topDepth > target.topRect.height) {
