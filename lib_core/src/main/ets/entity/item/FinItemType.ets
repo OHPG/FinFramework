@@ -25,4 +25,6 @@ export enum FinItemType {
 
   Video = 'Video',
 
+  BoxSet = 'BoxSet',
+
 }
