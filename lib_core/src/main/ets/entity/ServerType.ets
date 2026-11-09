@@ -30,6 +30,10 @@ export enum ServerType {
   /**
    * Local self-scraping mode
    */
-  LOCAL = "Local"
+  LOCAL = "Local",
+  /**
+   * fnOS (飞牛影视) compat mode (Jellyfin-like API)
+   */
+  FNOS_COMPAT = "FnOsCompat"
 
 }

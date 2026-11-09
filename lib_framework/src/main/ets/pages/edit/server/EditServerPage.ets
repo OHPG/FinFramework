@@ -84,6 +84,9 @@ struct ServerItem {
       case ServerType.PLEX:
         this.itemIcon = $r('app.media.plex')
         break
+      case ServerType.FNOS_COMPAT:
+        this.itemIcon = $r('app.media.fnos')
+        break
       case ServerType.KOMGA:
         this.itemIcon = $r('app.media.komga')
         break
