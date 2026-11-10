@@ -87,6 +87,9 @@ struct ServerItem {
       case ServerType.FNOS_COMPAT:
         this.itemIcon = $r('app.media.fnos')
         break
+      case ServerType.FNOS_NATIVE:
+        this.itemIcon = $r('app.media.fnos')
+        break
       case ServerType.KOMGA:
         this.itemIcon = $r('app.media.komga')
         break

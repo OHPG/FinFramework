@@ -34,6 +34,11 @@ export enum ServerType {
   /**
    * fnOS (飞牛影视) compat mode (Jellyfin-like API)
    */
-  FNOS_COMPAT = "FnOsCompat"
+  FNOS_COMPAT = "FnOsCompat",
+
+  /**
+   * fnOS (飞牛影视) native mode (/v/api/v1 with authx signature)
+   */
+  FNOS_NATIVE = "FnOsNative"
 
 }
